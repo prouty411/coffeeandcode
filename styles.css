@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
+
+*{
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: Quicksand;
+}
+body{
+    background: #C78989;
+    background: #ffece6;
+}
+.container > h1{
+    text-align: center;
+    color: #c032e7;
+    margin-top: 10%;
+}
+.buttonArea > button{
+    width: 24%;
+    font-weight: bold;
+}
+.buttonArea{
+    /* border: 1px solid black; */
+    margin-top: 10%;
+    display: flex;
+    justify-content: center;
+}
+.buttonArea > button:nth-child(1){
+    background: #E5C1A0;
+}
+.buttonArea > button:nth-child(2){
+    background: #FFBB7C;
+    margin-left: 1%;
+}
+input{
+    border: none;
+    outline: none;
+    background: #ffece6;
+    border-bottom: 1px solid gray;
+    width: 50%;
+    margin-left: 25%;
+    margin-top: 15%;   
+    margin-bottom: 3%;
+}
+.searchArea button{
+    background: tan;
+    width: 80%;
+    margin: 0 auto;
+}

@@ -1,18 +1,30 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two');
 
+html{
+    height: 100%;
+}
 *{
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: Quicksand;
+    font-family: 'Shadows Into Light Two',
+    cursive;
 }
 body{
     background: #C78989;
     background: #ffece6;
+    background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./wallpaper.jpeg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 .container > h1{
+    font-family: 'Shadows Into Light Two',
+    cursive;
     text-align: center;
-    color: #c032e7;
+    color: white;
+    font-size: 5em;
     margin-top: 10%;
 }
 .buttonArea > button{
@@ -26,24 +38,38 @@ body{
     justify-content: center;
 }
 .buttonArea > button:nth-child(1){
-    background: #E5C1A0;
+    background: #CEF5E9;
+    outline: none;
+    border: none;
 }
 .buttonArea > button:nth-child(2){
-    background: #FFBB7C;
+    background: #FEE6FF;
     margin-left: 1%;
+    outline: none;
+    border: none;
 }
 input{
     border: none;
     outline: none;
     background: #ffece6;
-    border-bottom: 1px solid gray;
+    background: transparent;
+    border-bottom: 4px solid white;
     width: 50%;
     margin-left: 25%;
     margin-top: 15%;   
     margin-bottom: 3%;
+    color: white;
+    font-size: 2em;
+}
+input::placeholder{
+    color: white;
+    height: 2.5em;
+    font-size: 1.5em;
 }
 .searchArea button{
-    background: tan;
+    background: #F5E5C5;
     width: 80%;
     margin: 0 auto;
+    outline: none;
+    border: none;
 }

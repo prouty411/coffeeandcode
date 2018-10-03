@@ -8,9 +8,9 @@ function initializeApp() {
   
 }
 function displayMap() {
-let mapProps = { 
-    zoom: 8,
-    center: {lat: -34.397, lng: 150.644}
+var mapProps = { 
+    zoom: 12,
+    center: { lat: 33.6846, lng: -117.8265}
 }
 var map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
 }

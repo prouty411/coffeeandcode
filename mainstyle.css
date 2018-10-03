@@ -1,21 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Quicksand');
+@import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two');
+
+html {
+    height: 100%;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Shadows Into Light Two',
+        cursive;
+}
+body{
+    background: #ffece6;
+}
+.navbar{
+    border-bottom: 1px solid black;
+}
+.header{
+    border-bottom: 1px solid black;
+    width: 30%;
+    margin: 0 auto;
+}
+h1{
+    text-align: center;
+}
 #googleMap {
     height:100%;
     width: 100%;
 }
 #map-box {
-    display:flex;
     order:1;
     padding: 0;
   
 }
 #info-box {
-    display:flex;
     order:2;
 }
 .container-fluid { 
     display:flex;
     height:70%;
     padding:0;
+    flex-wrap: wrap;
+
 }
 #carousel { 
     height:500px;
@@ -25,7 +53,8 @@
 #footer { 
     border: 2px black solid;
     height: 148px;
-    overflow: hidden;
+    /* overflow: hidden; */
+    order: 3;
 }
 body {
     width: 100%;    
@@ -33,4 +62,16 @@ body {
 }
 .carousel-item {
     height: 100%
+}
+
+
+@media only screen and (max-width: 791px){
+    .container-fluid{
+        /* display: block; */
+
+    }
+    .col-md-6{
+        max-width: 100% !important;
+    }
+
 }

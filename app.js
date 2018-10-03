@@ -47,10 +47,9 @@ function h2(text){
     return $('<h3>').text(text);
 }
 function convertPhone(string) {
-    string = string.slice(2); console.log(string);
-    let array = string.split(''); console.log(array);
+    string = string.slice(2); 
+    let array = string.split(''); 
     array.unshift('(');
-    console.log(array);
     array[3] = array[3] + ') ';
     array[6] = array[6] + '-';
     return array.join('');
@@ -73,7 +72,8 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
-            term: `${types}`,
+            // term: `${types}`,
+            term: 'coffee shop',
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             categories: `${types}, All`,
@@ -114,7 +114,7 @@ function getYelpData(map) {
                 var infowindow = new google.maps.InfoWindow({
                     content: content
                 });
-                console.log(types);
+            
                 if (types === `coffee`) {
                     icon = "./cafe.svg"
                 } else {
@@ -136,7 +136,7 @@ function getYelpData(map) {
                     return function () {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
-                        console.log(marker);
+                    
                     };
                 })(marker, content, infowindow));
             }
@@ -147,3 +147,52 @@ function getYelpData(map) {
     }
     $.ajax(settings);
 }
+/*************************GOOGLE DIRECTIONS */
+function getDirections(pos) { // Pass POS which is position of desire coffee shop or library 
+   
+   console.log(navigator.geolocation);
+if (navigator.geolocation) {
+   
+        navigator.geolocation.getCurrentPosition(function(position) {
+               var currentPos = {
+                 lat: position.coords.latitude,
+                 lng: position.coords.longitude
+              }
+              directionObjects = {
+                origin: currentPos,
+                destination: {lat:33.7385, lng:-117.8250 },
+                travelMode: "DRIVING",
+                } 
+            
+            var directionsService = new google.maps.DirectionsService
+            directionsService.route(directionObjects, (response) => {
+            directions = response.routes[0].legs[0].steps;
+            // $('#info-box').empty();
+            for (var i = 0; i < directions.length; i++) {
+                console.log(directions[i].instructions)
+                    // var currentDirection = $("<p>").html(directions[i].instructions);
+                    // $('#info-box').append(currentDirection)
+                }
+                                    }); 
+            
+            })
+        }
+        
+// directionObjects = {
+//     origin: currentPos,
+//     destination: {lat:33.7385, lng:-117.8250 },
+//     travelMode: "DRIVING",
+//     } 
+
+// var directionsService = new google.maps.DirectionsService
+// directionsService.route(directionObjects, (response) => {
+// directions = response.routes[0].legs[0].steps;
+// // $('#info-box').empty();
+// for (var i = 0; i < directions.length; i++) {
+//     console.log(directions[i].instructions)
+//         // var currentDirection = $("<p>").html(directions[i].instructions);
+//         // $('#info-box').append(currentDirection)
+//     }
+//                         }); 
+    }
+

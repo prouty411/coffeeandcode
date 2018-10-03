@@ -1,0 +1,36 @@
+#googleMap {
+    height:100%;
+    width: 100%;
+}
+#map-box {
+    display:flex;
+    order:1;
+    padding: 0;
+  
+}
+#info-box {
+    display:flex;
+    order:2;
+}
+.container-fluid { 
+    display:flex;
+    height:70%;
+    padding:0;
+}
+#carousel { 
+    height:500px;
+    width: 200px;
+  }
+
+#footer { 
+    border: 2px black solid;
+    height: 148px;
+    overflow: hidden;
+}
+body {
+    width: 100%;    
+    height: 100%;
+}
+.carousel-item {
+    height: 100%
+}

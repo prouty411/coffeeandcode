@@ -5,6 +5,7 @@ function initializeApp() {
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
+    $('.location').click(getLocation);
     $('.homeButton').click(home);
     $(document).keypress(function(e) {
         if(e.which == 13) {
@@ -14,6 +15,20 @@ function initializeApp() {
     });
 
 }
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log('error');
+    }
+}
+
+function showPosition(position) {
+    console.log ("Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude);
+}
+
+
 
 function home(){
     localStorage.clear();

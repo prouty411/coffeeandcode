@@ -5,6 +5,34 @@ function initializeApp() {
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
+    $('.location').click(getLocation);
+    $('.homeButton').click(home);
+    $(document).keypress(function(e) {
+        if(e.which == 13) {
+            e.preventDefault();
+            $("#search").click();
+        }
+    });
+
+}
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log('error');
+    }
+}
+
+function showPosition(position) {
+    console.log ("Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude);
+}
+
+
+
+function home(){
+    localStorage.clear();
+    window.location.href = "index.html";
 }
 
 function displayMap() {
@@ -37,6 +65,16 @@ function selectType() {
 }
 
 function initiateSearch() {
+    if (localStorage.getItem("types") === null){
+        $('#errorMessage').text('Please select cafe or library.');
+        $('#errorModal').modal("show");
+        return;
+    }
+    if($('#cityInput').val() === ''){
+        $('#errorMessage').text('Please input a city.');
+        $('#errorModal').modal("show");
+        return;
+    }
     let city = $('#cityInput').val();
     localStorage.setItem("city", `${city}`);
     window.location.href = "main.html";
@@ -49,6 +87,7 @@ function h2(text){
 function convertPhone(string) {
     string = string.slice(2); 
     let array = string.split(''); 
+
     array.unshift('(');
     array[3] = array[3] + ') ';
     array[6] = array[6] + '-';
@@ -114,7 +153,7 @@ function getYelpData(map) {
                 var infowindow = new google.maps.InfoWindow({
                     content: content
                 });
-            
+
                 if (types === `coffee`) {
                     icon = "./cafe.svg"
                 } else {
@@ -136,7 +175,7 @@ function getYelpData(map) {
                     return function () {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
-                    
+
                     };
                 })(marker, content, infowindow));
             }

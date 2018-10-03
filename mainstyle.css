@@ -23,15 +23,24 @@ body {
 .navbar {
     border-bottom: 1px solid black;
 }
-
-.header {
-    border-bottom: 1px solid black;
-    width: 35%;
-    margin: 0 auto;
+.homeButton{
+    height: 6vh;
+    width: auto;
 }
+.header {
+    display: inline-flex;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 8vh;
+}
+
 
 h1 {
     text-align: center;
+    width: 35%;
+    margin: 0 auto;
+    border-bottom: 1px solid black;
+
 }
 
 #googleMap {

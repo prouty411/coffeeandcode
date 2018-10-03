@@ -78,3 +78,7 @@ input::placeholder{
 
     border: 10px solid rgba(81, 203, 238, 1);
 }
+.errorContainer{
+    text-align: center;
+    font-size: 35px;
+}

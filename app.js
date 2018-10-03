@@ -16,10 +16,12 @@ var map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
 }
 
 function selectType() {
+    //if what we click is highlited...
     if($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
         localStorage.clear();
     }
+    //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
     $(".type").removeClass('highlight')
     $(this).addClass('highlight')

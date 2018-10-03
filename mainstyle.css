@@ -11,12 +11,13 @@ html {
     margin: 0;
     font-family: 'Shadows Into Light Two',
         cursive;
+        font-family: Quicksand;
 }
 
 body {
     background: #ffece6;
     background: #cc9766;
-    background: linear-gradient(to bottom, rgba(233, 185, 112, 0.986), #eea3b9);
+    background: linear-gradient(to bottom, rgba(233, 185, 112, 0.986), rgb(233, 171, 195));
 }
 
 .navbar {
@@ -36,7 +37,9 @@ h1 {
 #googleMap {
     height: 100%;
     width: 100%;
-    margin-bottom: 1%
+    margin-bottom: 1%;
+    border-radius: 3%;
+    /* filter: drop-shadow(20px 5px 50px #d68419); */
 }
 
 #map-box {
@@ -46,6 +49,12 @@ h1 {
 
 #info-box {
     order: 2;
+    overflow: scroll;
+    height: 100%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    
+
 }
 
 .container-fluid {
@@ -82,6 +91,48 @@ body {
     width: 100%;
     height: auto;
 }
+.imageArea img{
+    border: 1px solid white;
+    border-radius: 5px;
+}
+.resultContainer{
+    display: flex;
+    margin-top: 2%;
+    color: black;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    box-shadow: 5px 5px 5px darkslategray;
+
+
+}
+
+.margin{
+    margin-top: 10%;
+    width: 100%;
+    border-bottom: 1px dotted black;
+}
+
+.infoArea{
+    margin-left: 1%;
+    width: 69%;
+
+
+}
+
+.title, .phone, .address, .isOpen{
+    text-align: center;
+}
+
+
+
+
+
+
+
+
+
+
 
 @media only screen and (max-width: 791px) {
     .container-fluid {

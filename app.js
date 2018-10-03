@@ -80,12 +80,14 @@ function getYelpData(map) {
             sort_by: "rating",
             radius: 8000,
             limit: 50,
+            // open_now: true
         },
         success: function (response) {
             let {businesses} = response;
             console.log(businesses)
             let result = businesses.map((eachPlace, index) => {
                 let {name, image_url, is_closed, display_phone, phone, url, location: {address1, city, zip_code}} = eachPlace;
+                console.log('isclosed: ', is_closed)
                 let image = $('<img>', {
                     src: image_url
                 })
@@ -94,7 +96,7 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let isOpenElem = h2(`${is_closed ? 'Currently Open ✅ ' : 'Currently Closed ❌'}`).addClass('isOpen');
+                let isOpenElem = h2(`${is_closed ? 'Currently Closed ❌ ' : 'Currently Open ✅'}`).addClass('isOpen');
                 let marginElem = $('<div>').addClass('margin')
                 infoAreaElem.append(titleElem, phoneElem, addressElem, isOpenElem, marginElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)

@@ -73,3 +73,8 @@ input::placeholder{
     outline: none;
     border: none;
 }
+.highlight {
+    box-shadow: 0 0 50px rgba(81, 203, 238, 1);
+
+    border: 10px solid rgba(81, 203, 238, 1);
+}

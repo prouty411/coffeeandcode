@@ -1,4 +1,6 @@
 $(document).ready(initializeApp);
+var previousRoute = false;
+
 
 function initializeApp() {
     $('#carousel').carousel();
@@ -13,6 +15,7 @@ function initializeApp() {
             $("#search").click();
         }
     });
+  
 
 }
 function getLocation() {
@@ -45,6 +48,7 @@ function displayMap() {
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     getYelpData(map);
+  
 }
 
 
@@ -176,9 +180,10 @@ function getYelpData(map) {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
 
-                    };
+                    };  
                 })(marker, content, infowindow));
             }
+            getDirections();
         },
         error: function (err) {
             console.log("error");
@@ -186,10 +191,13 @@ function getYelpData(map) {
     }
     $.ajax(settings);
 }
-/*************************GOOGLE DIRECTIONS */
-function getDirections(pos) { // Pass POS which is position of desire coffee shop or library 
-   
-   console.log(navigator.geolocation);
+/*************************GOOGLE DIRECTIONS *************************************************/
+function getDirections() { // Pass POS which is position of desire coffee shop or library 
+    let map = new google.maps.Map(document.getElementById("googleMap"),{
+        zoom: 7,
+        center:   {lat: 33.6846,
+        lng: -117.8265 }
+    })
 if (navigator.geolocation) {
    
         navigator.geolocation.getCurrentPosition(function(position) {
@@ -201,11 +209,24 @@ if (navigator.geolocation) {
                 origin: currentPos,
                 destination: {lat:33.7385, lng:-117.8250 },
                 travelMode: "DRIVING",
+                avoidTolls: true, 
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
                 } 
             
             var directionsService = new google.maps.DirectionsService
-            directionsService.route(directionObjects, (response) => {
+            let display = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map: map,
+            });
+            directionsService.route(directionObjects, (response, status) => {
             directions = response.routes[0].legs[0].steps;
+            if (status === 'OK') {
+                if (previousRoute) {
+                    previousRoute.setMap(null);
+                }
+            }
+                previousRoute = display;
+                display.setDirections(response);
             // $('#info-box').empty();
             for (var i = 0; i < directions.length; i++) {
                 console.log(directions[i].instructions)

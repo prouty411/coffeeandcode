@@ -34,7 +34,7 @@ function getLocation() {
 function showPosition(position) {
     let latitude = position.coords.latitude;
     let longitude = position.coords.longitude;
-    getCarouselYelpData(latitude,longitude);
+    getCarouselYelpData(latitude, longitude);
     $(".carouselContainer").removeClass("hideCarousel");
 
 }
@@ -66,7 +66,6 @@ function selectType() {
     //if what we click is highlited...
     if ($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
-        // localStorage.clear();
     }
     //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
@@ -77,10 +76,12 @@ function selectType() {
     }
 
 }
-function appendCity(){
+
+function appendCity() {
     let citySearched = localStorage.getItem('city');
     $('.city-name').text('City Searched: ' + citySearched);
 }
+
 function initiateSearch() {
     if (localStorage.getItem("types") === null) {
         $('#errorMessage').text('Please select cafe or library.');
@@ -109,6 +110,7 @@ function convertPhone(string) {
     array[6] = array[6] + '-';
     return array.join('');
 }
+
 function getDetailedYelpData(id, map) {
     console.log(id)
     $('#details-modal').modal('show');
@@ -168,7 +170,7 @@ function getDetailedYelpData(id, map) {
 }
 
 /******** API DATA FOR CAROUSEL******************************* */
-function getCarouselYelpData(latitude,longitude) {
+function getCarouselYelpData(latitude, longitude) {
     var types;
     if (localStorage.length) {
         types = localStorage.getItem("types");
@@ -190,15 +192,28 @@ function getCarouselYelpData(latitude,longitude) {
             limit: 10,
         },
         success: function (response) {
-            let {businesses} = response;
+            let {
+                businesses
+            } = response;
             let result = businesses.map((eachPlace, index) => {
-                let {name, image_url, display_phone, phone, url, location: {address1, city, zip_code}} = eachPlace;
+                let {
+                    name,
+                    image_url,
+                    display_phone,
+                    phone,
+                    url,
+                    location: {
+                        address1,
+                        city,
+                        zip_code
+                    }
+                } = eachPlace;
                 let image = $('<img>', {
                     src: image_url,
                     class: "img-fluid mx-auto d-block"
                 })
                 let infoDiv = $('<div>').addClass('carouselInfoDiv').append(name);
-                let carouselDiv = $('<div>').addClass('carousel-item col-md-3').append(image,infoDiv);
+                let carouselDiv = $('<div>').addClass('carousel-item col-md-3').append(image, infoDiv);
                 $('.carouselItems').append(carouselDiv);
             })
         },
@@ -271,7 +286,7 @@ function getYelpData(map) {
                 $('#info-box').append(entireItem);
                 moreInfoElem.on('click', function () {
                     console.log(id);
-                    getDetailedYelpData(id,map);
+                    getDetailedYelpData(id, map);
                 })
             })
             map.setCenter({
@@ -309,9 +324,9 @@ function getYelpData(map) {
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
                     currWindow = false;
                     return function () {
-                        if( lastMarker ) {
+                        if (lastMarker) {
                             lastMarker.close();
-                         }
+                        }
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
                         lastMarker = infowindow;
@@ -378,14 +393,9 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     // $('#info-box').append(currentDirection)
                 }
 
-                                    }); 
-            
-            })
-        }
-    }
-        
             });
 
         })
     }
 }
+

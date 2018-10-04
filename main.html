@@ -1,75 +1,76 @@
 <html>
 
 <head>
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Page Title</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
-  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
-    crossorigin="anonymous">
-  <script type="text/javascript" src="https://www.google.com/jsapi">
-    google.load("search", "2");
-  </script>
-  <script src="app.js"></script>
-  <link rel="stylesheet" href="mainstyle.css">
+ <meta charset="utf-8" />
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+ <title>Page Title</title>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+   crossorigin="anonymous"></script>
+ <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+   crossorigin="anonymous">
+ <script type="text/javascript" src="https://www.google.com/jsapi">
+   google.load("search", "2");
+ </script>
+ <script src="app.js"></script>
+ <link rel="stylesheet" href="mainstyle.css">
 </head>
 
 <body>
-  <div class="header">
-    <button class="btn homeButton">Home 🏠</button> <span class="city-name">City Searched: Irvine</span>
-<h1>Coffee and Code👨‍💻☕👩‍💻</h1>
-    <!-- <button class="btn btn-secondary">Enable Location</button> -->
+ <div class="header">
+   <button class="btn homeButton">Home :house:</button> <span class="city-name">City Searched: Irvine</span>
+<h1>Coffee and Code:male-technologist::coffee::female-technologist:</h1>
+   <!-- <button class="btn btn-secondary">Enable Location</button> -->
 
-  </div>
-  <div class="container-fluid">
-    <div id="map-box" class="col-md-6 col-sm-12">
-      <div id="googleMap"></div>
-    </div>
-    <div id="info-box" class="col-md-6 col-sm-12">
-    </div>
-    <div id="footer" class="col-sm-12">
-      <div class="container-fluid">
-        <div id="carouselExample" class="carousel slide carouselContainer hideCarousel" data-ride="carousel" data-interval="9000">
-          <div class="carousel-inner row w-100 mx-auto carouselItems" role="listbox">
+ </div>
+ <div class="container-fluid">
+   <div id="map-box" class="col-md-6 col-sm-12">
+     <div id="googleMap"></div>
+   </div>
+   <div id="info-box" class="col-md-6 col-sm-12">
+   </div>
+   <div id="footer" class="col-sm-12">
+     <div class="container-fluid">
+       <div id="carouselExample" class="carousel slide carouselContainer hideCarousel" data-ride="carousel" data-interval="9000">
+         <div class="carousel-inner row w-100 mx-auto carouselItems" role="listbox">
 
-  </div>
-  <!-- END OF FOOTER -->
+ </div>
+ <!-- END OF FOOTER -->
 
-  <!-- START OF MODAL -->
-  <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title text-center" id="details-header" style="margin-left: auto"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+ <!-- START OF MODAL -->
+ </div>
+ <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+   aria-hidden="true">
+   <div class="modal-dialog modal-dialog-centered" role="document">
+     <div class="modal-content">
+       <div class="modal-header">
+         <h5 class="modal-title text-center" id="details-header" style="margin-left: auto"></h5>
+         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+           <span aria-hidden="true">&times;</span>
+         </button>
 
-        </div>
-        <div class="modal-body" style="display:flex; justify-content: space-around; border-radius: 4px">
-          <div class="detailed-image">
-            <img src="https://s3-media4.fl.yelpcdn.com/bphoto/zciEPC7SUMLRuknQssZiMw/o.jpg">
-          </div>
-          <div class="text-center details-modal">
-            <p class="text-center detailed-address"></p>
-            <p class="text-center detailed-open"></p>
-            <p class="text-center detailed-price"></p>
-            <p class="text-center detailed-rating">4.5/5 stars</p>
-            <a href="" target="_blank" class="detailed-url">View Additional Info On Yelp</a>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="directions-button">Get Directions</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzXoiyq4O3y_nP9Luo3oUz4rOpYl9vCtI&callback=displayMap&libraries=places"></script>
+       </div>
+       <div class="modal-body" style="display:flex; justify-content: space-around; border-radius: 4px">
+         <div class="detailed-image">
+           <img src="https://s3-media4.fl.yelpcdn.com/bphoto/zciEPC7SUMLRuknQssZiMw/o.jpg">
+         </div>
+         <div class="text-center details-modal">
+           <p class="text-center detailed-address"></p>
+           <p class="text-center detailed-open"></p>
+           <p class="text-center detailed-price"></p>
+           <p class="text-center detailed-rating">4.5/5 stars</p>
+           <a href="" target="_blank" class="detailed-url">View Additional Info On Yelp</a>
+         </div>
+       </div>
+       <div class="modal-footer">
+         <button type="button" class="btn btn-primary" id="directions-button">Get Directions</button>
+         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+       </div>
+     </div>
+   </div>
+ </div>
+ <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzXoiyq4O3y_nP9Luo3oUz4rOpYl9vCtI&callback=displayMap&libraries=places"></script>
 </body>
 
 </html>

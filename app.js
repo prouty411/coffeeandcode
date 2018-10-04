@@ -1,5 +1,6 @@
 $(document).ready(initializeApp);
 var previousRoute = false;
+var lastMarker = false;
 
 
 function initializeApp() {
@@ -105,7 +106,7 @@ function convertPhone(string) {
     return array.join('');
 }
 
-function getDetailedYelpData(id) {
+function getDetailedYelpData(id, map) {
     console.log(id)
     $('#details-modal').modal('show');
     let ajaxOptions = {
@@ -150,7 +151,7 @@ function getDetailedYelpData(id) {
             $('.detailed-rating').text(`${rating}/5 stars`);
             $('.detailed-url').attr('href', url);
             $('#directions-button').on('click', function () {
-                getDirections(longitude, latitude);
+                getDirections(longitude, latitude, map);
             })
 
 
@@ -225,7 +226,7 @@ function getYelpData(map) {
                 $('#info-box').append(entireItem);
                 moreInfoElem.on('click', function () {
                     console.log(id);
-                    getDetailedYelpData(id);
+                    getDetailedYelpData(id,map);
                 })
             })
 
@@ -255,16 +256,21 @@ function getYelpData(map) {
                 };
                 var marker = new google.maps.Marker({
                     map: map,
-                    draggable: true,
+                    draggable: false,
                     animation: google.maps.Animation.DROP,
                     position: pos,
                     title: response.businesses[index].name,
                     icon: icon
                 });
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+                    currWindow = false;
                     return function () {
+                        if( lastMarker ) {
+                            lastMarker.close();
+                         }
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
+                        lastMarker = infowindow;
 
                     };
                 })(marker, content, infowindow));
@@ -278,19 +284,19 @@ function getYelpData(map) {
     $.ajax(settings);
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
-function getDirections(long, lat) { // Pass POS which is position of desire coffee shop or library 
+function getDirections(long, lat, map) { // Pass POS which is position of desire coffee shop or library 
     var cafePOS = {
         lat: lat,
         lng: long
     }
     console.log(lat, long)
-    let map = new google.maps.Map(document.getElementById("googleMap"), {
-        zoom: 7,
-        center: {
-            lat: 33.6846,
-            lng: -117.8265
-        }
-    })
+    // let map = new google.maps.Map(document.getElementById("googleMap"), {
+    //     zoom: 7,
+    //     center: {
+    //         lat: 33.6846,
+    //         lng: -117.8265
+    //     }
+    // })
     if (navigator.geolocation) {
 
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -310,7 +316,7 @@ function getDirections(long, lat) { // Pass POS which is position of desire coff
 
             var directionsService = new google.maps.DirectionsService
             let display = new google.maps.DirectionsRenderer({
-                draggable: true,
+                draggable: false,
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {

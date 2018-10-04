@@ -1,5 +1,10 @@
 $(document).ready(initializeApp);
 var previousRoute = false;
+
+var lastMarker = false;
+
+
+
 function initializeApp() {
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
@@ -25,8 +30,12 @@ function getLocation() {
 }
 
 function showPosition(position) {
-    console.log("Latitude: " + position.coords.latitude + "<br>Longitude: " + position.coords.longitude);
+    console.log("Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude);
 }
+
+
+
 
 function home() {
     localStorage.clear();
@@ -95,8 +104,7 @@ function convertPhone(string) {
     array[6] = array[6] + '-';
     return array.join('');
 }
-
-function getDetailedYelpData(id) {
+function getDetailedYelpData(id, map) {
     console.log(id)
     $('#details-modal').modal('show');
     let ajaxOptions = {
@@ -141,7 +149,7 @@ function getDetailedYelpData(id) {
             $('.detailed-rating').text(`${rating}/5 stars`);
             $('.detailed-url').attr('href', url);
             $('#directions-button').on('click', function () {
-                getDirections(longitude, latitude);
+                getDirections(longitude, latitude, map);
             })
 
 
@@ -172,7 +180,7 @@ function getYelpData(map) {
         "dataType": "JSON",
         "data": {
             // term: `${types}`,
-            term: 'coffee shop',
+            term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             categories: `${types}, US`,
@@ -216,7 +224,7 @@ function getYelpData(map) {
                 $('#info-box').append(entireItem);
                 moreInfoElem.on('click', function () {
                     console.log(id);
-                    getDetailedYelpData(id);
+                    getDetailedYelpData(id,map);
                 })
             })
 
@@ -246,21 +254,26 @@ function getYelpData(map) {
                 };
                 var marker = new google.maps.Marker({
                     map: map,
-                    draggable: true,
+                    draggable: false,
                     animation: google.maps.Animation.DROP,
                     position: pos,
                     title: response.businesses[index].name,
                     icon: icon
                 });
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+                    currWindow = false;
                     return function () {
+                        if( lastMarker ) {
+                            lastMarker.close();
+                         }
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
+                        lastMarker = infowindow;
 
                     };
                 })(marker, content, infowindow));
             }
-            getDirections();
+
         },
         error: function (err) {
             console.log("error");
@@ -269,14 +282,11 @@ function getYelpData(map) {
     $.ajax(settings);
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
-function getDirections() { // Pass POS which is position of desire coffee shop or library 
-    let map = new google.maps.Map(document.getElementById("googleMap"), {
-        zoom: 7,
-        center: {
-            lat: 33.6846,
-            lng: -117.8265
-        }
-    })
+function getDirections(long, lat, map) { // Pass POS which is position of desire coffee shop or library 
+    var cafePOS = {
+        lat: lat,
+        lng: long
+    }
     if (navigator.geolocation) {
 
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -286,10 +296,7 @@ function getDirections() { // Pass POS which is position of desire coffee shop o
             }
             directionObjects = {
                 origin: currentPos,
-                destination: {
-                    lat: 33.7385,
-                    lng: -117.8250
-                },
+                destination: cafePOS,
                 travelMode: "DRIVING",
                 avoidTolls: true,
                 unitSystem: google.maps.UnitSystem.IMPERIAL,
@@ -297,7 +304,7 @@ function getDirections() { // Pass POS which is position of desire coffee shop o
 
             var directionsService = new google.maps.DirectionsService
             let display = new google.maps.DirectionsRenderer({
-                draggable: true,
+                draggable: false,
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
@@ -306,6 +313,15 @@ function getDirections() { // Pass POS which is position of desire coffee shop o
                     if (previousRoute) {
                         previousRoute.setMap(null);
                     }
+                    previousRoute = display;
+                    display.setDirections(response);
+                    $('#info-box').empty();
+                    for (var i = 0; i < directions.length; i++) {
+
+                        var currentDirection = $("<p>").html(directions[i].instructions);
+                        $('#info-box').append(currentDirection)
+                    }
+                    $('#details-modal').modal('hide');
                 }
                 previousRoute = display;
                 display.setDirections(response);
@@ -320,20 +336,3 @@ function getDirections() { // Pass POS which is position of desire coffee shop o
         })
     }
 }
-
-// directionObjects = {
-//     origin: currentPos,
-//     destination: {lat:33.7385, lng:-117.8250 },
-//     travelMode: "DRIVING",
-//     } 
-
-// var directionsService = new google.maps.DirectionsService
-// directionsService.route(directionObjects, (response) => {
-// directions = response.routes[0].legs[0].steps;
-// // $('#info-box').empty();
-// for (var i = 0; i < directions.length; i++) {
-//     console.log(directions[i].instructions)
-//         // var currentDirection = $("<p>").html(directions[i].instructions);
-//         // $('#info-box').append(currentDirection)
-//     }
-//                         });

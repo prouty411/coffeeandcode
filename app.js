@@ -1,4 +1,9 @@
 $(document).ready(initializeApp);
+var previousRoute = false;
+
+var lastMarker = false;
+
+
 
 function initializeApp() {
     $('#carousel').carousel();
@@ -7,18 +12,19 @@ function initializeApp() {
     $('#coffee').click(selectType);
     $('.location').click(getLocation);
     $('.homeButton').click(home);
-    $(document).keypress(function(e) {
-        if(e.which == 13) {
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
             e.preventDefault();
             $("#search").click();
         }
     });
-
+    appendCity();
 }
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
+    } else {
         console.log('error');
         $(".carouselContainer").addClass("hideCarousel");
 
@@ -30,13 +36,16 @@ function showPosition(position) {
     let longitude = position.coords.longitude;
     getCarouselYelpData(latitude,longitude);
     $(".carouselContainer").removeClass("hideCarousel");
+
 }
 
 
 
-function home(){
+
+function home() {
     localStorage.clear();
     window.location.href = "index.html";
+
 }
 
 function displayMap() {
@@ -49,6 +58,7 @@ function displayMap() {
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     getYelpData(map);
+
 }
 
 
@@ -56,7 +66,7 @@ function selectType() {
     //if what we click is highlited...
     if ($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
-        localStorage.clear();
+        // localStorage.clear();
     }
     //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
@@ -67,14 +77,17 @@ function selectType() {
     }
 
 }
-
+function appendCity(){
+    let citySearched = localStorage.getItem('city');
+    $('.city-name').text('City Searched: ' + citySearched);
+}
 function initiateSearch() {
-    if (localStorage.getItem("types") === null){
+    if (localStorage.getItem("types") === null) {
         $('#errorMessage').text('Please select cafe or library.');
         $('#errorModal').modal("show");
         return;
     }
-    if($('#cityInput').val() === ''){
+    if ($('#cityInput').val() === '') {
         $('#errorMessage').text('Please input a city.');
         $('#errorModal').modal("show");
         return;
@@ -82,20 +95,76 @@ function initiateSearch() {
     let city = $('#cityInput').val();
     localStorage.setItem("city", `${city}`);
     window.location.href = "main.html";
-
 }
 
-function h2(text){
+function h2(text) {
     return $('<h3>').text(text);
 }
-function convertPhone(string) {
-    string = string.slice(2); 
-    let array = string.split(''); 
 
+function convertPhone(string) {
+    string = string.slice(2);
+    let array = string.split('');
     array.unshift('(');
     array[3] = array[3] + ') ';
     array[6] = array[6] + '-';
     return array.join('');
+}
+function getDetailedYelpData(id, map) {
+    console.log(id)
+    $('#details-modal').modal('show');
+    let ajaxOptions = {
+        'async': true,
+        "url": 'https://yelp.ongandy.com/businesses/details',
+        "method": 'POST',
+        "dataType": 'JSON',
+        "data": {
+            api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
+            id
+        },
+        success: function (response) {
+            console.log(response);
+            //photos is an array of photos
+            //is_open_now is a boolean
+            let {
+                hours,
+                name,
+                url,
+                image_url,
+                photos,
+                price,
+                rating,
+                location: {
+                    display_address
+                },
+                coordinates: {
+                    latitude,
+                    longitude
+                }
+            } = response;
+
+            let is_open_now = hours[0].is_open_now;
+            photos = photos[2]
+            display_address = display_address[0] + ' ' + display_address[1];
+            console.log(display_address);
+            $('#details-header').text(name);
+            $('.detailed-image > img').attr('src', photos);
+            $('.detailed-address').text(display_address)
+            $('.detailed-open').text(`${is_open_now ? 'Open Now ✅' : 'Currently Closed ❌'}`);
+            $('.detailed-price').text(`Price range: ${price}`);
+            $('.detailed-rating').text(`${rating}/5 stars`);
+            $('.detailed-url').attr('href', url);
+            $('#directions-button').on('click', function () {
+                getDirections(longitude, latitude, map);
+            })
+
+
+        },
+        error: function (error) {
+            console.log(error);
+        }
+    }
+
+    $.ajax(ajaxOptions);
 }
 
 /******** API DATA FOR CAROUSEL******************************* */
@@ -148,6 +217,7 @@ function getYelpData(map) {
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
+
     }
     var settings = {
 
@@ -156,19 +226,37 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
+
             term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
-            categories: `${types}, All`,
+            categories: `${types}, US`,
             sort_by: "rating",
             radius: 8000,
             limit: 50,
         },
         success: function (response) {
-            let {businesses} = response;
+            let {
+                businesses
+            } = response;
             console.log(businesses)
             let result = businesses.map((eachPlace, index) => {
-                let {name, image_url, is_closed, display_phone, phone, url, location: {address1, city, zip_code}} = eachPlace;
+                let {
+                    id,
+                    name,
+                    image_url,
+                    is_closed,
+                    display_phone,
+                    phone,
+                    url,
+                    price,
+                    rating,
+                    location: {
+                        address1,
+                        city,
+                        zip_code
+                    }
+                } = eachPlace;
                 let image = $('<img>', {
                     src: image_url
                 })
@@ -177,13 +265,15 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let isOpenElem = h2(`${is_closed ? 'Currently Open ✅ ' : 'Currently Closed ❌'}`).addClass('isOpen');
-                let marginElem = $('<div>').addClass('margin')
-                infoAreaElem.append(titleElem, phoneElem, addressElem, isOpenElem, marginElem);
+                let moreInfoElem = $('<div>').addClass('moreInfo').text('More Info')
+                infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
+                moreInfoElem.on('click', function () {
+                    console.log(id);
+                    getDetailedYelpData(id,map);
+                })
             })
-            console.log('howards api', result);
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
@@ -210,20 +300,26 @@ function getYelpData(map) {
                 };
                 var marker = new google.maps.Marker({
                     map: map,
-                    draggable: true,
+                    draggable: false,
                     animation: google.maps.Animation.DROP,
                     position: pos,
                     title: response.businesses[index].name,
                     icon: icon
                 });
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
+                    currWindow = false;
                     return function () {
+                        if( lastMarker ) {
+                            lastMarker.close();
+                         }
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
+                        lastMarker = infowindow;
 
                     };
                 })(marker, content, infowindow));
             }
+
         },
         error: function (err) {
             console.log("error");
@@ -231,54 +327,65 @@ function getYelpData(map) {
     }
     $.ajax(settings);
 }
-/*************************GOOGLE DIRECTIONS */
-function getDirections(pos) { // Pass POS which is position of desire coffee shop or library 
-   
-   console.log(navigator.geolocation);
-if (navigator.geolocation) {
-   
-        navigator.geolocation.getCurrentPosition(function(position) {
-               var currentPos = {
-                 lat: position.coords.latitude,
-                 lng: position.coords.longitude
-              }
-              directionObjects = {
+/*************************GOOGLE DIRECTIONS *************************************************/
+function getDirections(long, lat, map) { // Pass POS which is position of desire coffee shop or library 
+    var cafePOS = {
+        lat: lat,
+        lng: long
+    }
+    if (navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var currentPos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            }
+            directionObjects = {
                 origin: currentPos,
-                destination: {lat:33.7385, lng:-117.8250 },
+                destination: cafePOS,
                 travelMode: "DRIVING",
-                } 
-            
+                avoidTolls: true,
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
+            }
+
             var directionsService = new google.maps.DirectionsService
-            directionsService.route(directionObjects, (response) => {
-            directions = response.routes[0].legs[0].steps;
-            // $('#info-box').empty();
-            for (var i = 0; i < directions.length; i++) {
-                console.log(directions[i].instructions)
+            let display = new google.maps.DirectionsRenderer({
+                draggable: false,
+                map: map,
+            });
+            directionsService.route(directionObjects, (response, status) => {
+                directions = response.routes[0].legs[0].steps;
+                if (status === 'OK') {
+                    if (previousRoute) {
+                        previousRoute.setMap(null);
+                    }
+                    previousRoute = display;
+                    display.setDirections(response);
+                    $('#info-box').empty();
+                    for (var i = 0; i < directions.length; i++) {
+
+                        var currentDirection = $("<p>").html(directions[i].instructions);
+                        $('#info-box').append(currentDirection)
+                    }
+                    $('#details-modal').modal('hide');
+                }
+                previousRoute = display;
+                display.setDirections(response);
+                // $('#info-box').empty();
+                for (var i = 0; i < directions.length; i++) {
+                    console.log(directions[i].instructions)
                     // var currentDirection = $("<p>").html(directions[i].instructions);
                     // $('#info-box').append(currentDirection)
                 }
+
                                     }); 
             
             })
         }
     }
         
-// directionObjects = {
-//     origin: currentPos,
-//     destination: {lat:33.7385, lng:-117.8250 },
-//     travelMode: "DRIVING",
-//     } 
+            });
 
-// var directionsService = new google.maps.DirectionsService
-// directionsService.route(directionObjects, (response) => {
-// directions = response.routes[0].legs[0].steps;
-// // $('#info-box').empty();
-// for (var i = 0; i < directions.length; i++) {
-//     console.log(directions[i].instructions)
-//         // var currentDirection = $("<p>").html(directions[i].instructions);
-//         // $('#info-box').append(currentDirection)
-//     }
-//                         }); 
-//     }
-
-// f
+        })
+    }
+}

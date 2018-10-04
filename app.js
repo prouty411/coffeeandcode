@@ -105,7 +105,6 @@ function convertPhone(string) {
     return array.join('');
 }
 function getDetailedYelpData(id, map) {
-    console.log(id)
     $('#details-modal').modal('show');
     let ajaxOptions = {
         'async': true,
@@ -192,7 +191,6 @@ function getYelpData(map) {
             let {
                 businesses
             } = response;
-            console.log(businesses)
             let result = businesses.map((eachPlace, index) => {
                 let {
                     id,
@@ -223,7 +221,7 @@ function getYelpData(map) {
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
                 moreInfoElem.on('click', function () {
-                    console.log(id);
+                
                     getDetailedYelpData(id,map);
                 })
             })
@@ -238,7 +236,7 @@ function getYelpData(map) {
                     lng: response.businesses[index].coordinates.longitude
                 }
 
-                var content = response.businesses[index].name;
+                var content = response.businesses[index].name + "<p class='markerInfo'>More Info</p>";
                 var infowindow = new google.maps.InfoWindow({
                     content: content
                 });
@@ -258,7 +256,8 @@ function getYelpData(map) {
                     animation: google.maps.Animation.DROP,
                     position: pos,
                     title: response.businesses[index].name,
-                    icon: icon
+                    icon: icon,
+                    id: response.businesses[index].id
                 });
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
                     currWindow = false;
@@ -269,6 +268,7 @@ function getYelpData(map) {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
                         lastMarker = infowindow;
+                        $(".markerInfo").click(() => getDetailedYelpData(this.id).bind(this));
 
                     };
                 })(marker, content, infowindow));
@@ -327,7 +327,6 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 display.setDirections(response);
                 // $('#info-box').empty();
                 for (var i = 0; i < directions.length; i++) {
-                    console.log(directions[i].instructions)
                     // var currentDirection = $("<p>").html(directions[i].instructions);
                     // $('#info-box').append(currentDirection)
                 }

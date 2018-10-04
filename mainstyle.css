@@ -124,6 +124,12 @@ body {
     text-decoration: underline;
     font-size: 2em;
 }
+.markerInfo {
+    text-align: center;
+    color: mediumblue;
+    text-decoration: underline;
+    font-size: 1em;
+}
 .moreInfo:hover{
     cursor: pointer;
 }

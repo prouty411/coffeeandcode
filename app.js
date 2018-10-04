@@ -8,11 +8,6 @@ function initializeApp() {
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
-
-
-
-
-
     $('.location').click(getLocation);
     $('.homeButton').click(home);
     $(document).keypress(function (e) {
@@ -21,8 +16,6 @@ function initializeApp() {
             $("#search").click();
         }
     });
-
-
 }
 
 function getLocation() {
@@ -37,6 +30,7 @@ function showPosition(position) {
     console.log("Latitude: " + position.coords.latitude +
         "<br>Longitude: " + position.coords.longitude);
 }
+
 
 
 
@@ -105,7 +99,6 @@ function convertPhone(string) {
     array[6] = array[6] + '-';
     return array.join('');
 }
-
 function getDetailedYelpData(id, map) {
     console.log(id)
     $('#details-modal').modal('show');
@@ -185,7 +178,7 @@ function getYelpData(map) {
             term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
-            categories: `${types}, All`,
+            categories: `${types}, US`,
             sort_by: "rating",
             radius: 8000,
             limit: 50,
@@ -289,14 +282,6 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
         lat: lat,
         lng: long
     }
-    console.log(lat, long)
-    // let map = new google.maps.Map(document.getElementById("googleMap"), {
-    //     zoom: 7,
-    //     center: {
-    //         lat: 33.6846,
-    //         lng: -117.8265
-    //     }
-    // })
     if (navigator.geolocation) {
 
         navigator.geolocation.getCurrentPosition(function (position) {
@@ -304,8 +289,6 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             }
-            console.log(currentPos);
-            console.log(cafePOS);
             directionObjects = {
                 origin: currentPos,
                 destination: cafePOS,
@@ -320,7 +303,6 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
-                console.log(response);
                 directions = response.routes[0].legs[0].steps;
                 if (status === 'OK') {
                     if (previousRoute) {
@@ -336,25 +318,16 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     }
                     $('#details-modal').modal('hide');
                 }
+                previousRoute = display;
+                display.setDirections(response);
+                // $('#info-box').empty();
+                for (var i = 0; i < directions.length; i++) {
+                    console.log(directions[i].instructions)
+                    // var currentDirection = $("<p>").html(directions[i].instructions);
+                    // $('#info-box').append(currentDirection)
+                }
             });
 
         })
     }
-
-    // directionObjects = {
-    //     origin: currentPos,
-    //     destination: {lat:33.7385, lng:-117.8250 },
-    //     travelMode: "DRIVING",
-    //     } 
-
-    // var directionsService = new google.maps.DirectionsService
-    // directionsService.route(directionObjects, (response) => {
-    // directions = response.routes[0].legs[0].steps;
-    // // $('#info-box').empty();
-    // for (var i = 0; i < directions.length; i++) {
-    //     console.log(directions[i].instructions)
-    //         // var currentDirection = $("<p>").html(directions[i].instructions);
-    //         // $('#info-box').append(currentDirection)
-    //     }
-    //                         }); 
 }

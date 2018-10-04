@@ -1,6 +1,8 @@
 $(document).ready(initializeApp);
 var previousRoute = false;
+
 var lastMarker = false;
+
 
 
 function initializeApp() {
@@ -16,6 +18,7 @@ function initializeApp() {
             $("#search").click();
         }
     });
+    appendCity();
 }
 
 function getLocation() {
@@ -58,7 +61,7 @@ function selectType() {
     //if what we click is highlited...
     if ($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
-        localStorage.clear();
+        // localStorage.clear();
     }
     //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
@@ -69,7 +72,10 @@ function selectType() {
     }
 
 }
-
+function appendCity(){
+    let citySearched = localStorage.getItem('city');
+    $('.city-name').text('City Searched: ' + citySearched);
+}
 function initiateSearch() {
     if (localStorage.getItem("types") === null) {
         $('#errorMessage').text('Please select cafe or library.');
@@ -84,7 +90,6 @@ function initiateSearch() {
     let city = $('#cityInput').val();
     localStorage.setItem("city", `${city}`);
     window.location.href = "main.html";
-
 }
 
 function h2(text) {
@@ -165,7 +170,7 @@ function getYelpData(map) {
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
-        localStorage.clear();
+        // localStorage.clear();
     }
     var settings = {
 

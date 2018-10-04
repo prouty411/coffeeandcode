@@ -1,4 +1,6 @@
 $(document).ready(initializeApp);
+var previousRoute = false;
+
 
 function initializeApp() {
     $('#carousel').carousel();
@@ -13,6 +15,7 @@ function initializeApp() {
             $("#search").click();
         }
     });
+  
 
 }
 function getLocation() {
@@ -45,6 +48,7 @@ function displayMap() {
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     getYelpData(map);
+  
 }
 
 
@@ -179,6 +183,7 @@ function getYelpData(map) {
                     };
                 })(marker, content, infowindow));
             }
+            getDirections(map);
         },
         error: function (err) {
             console.log("error");
@@ -186,9 +191,15 @@ function getYelpData(map) {
     }
     $.ajax(settings);
 }
-/*************************GOOGLE DIRECTIONS */
-function getDirections(pos) { // Pass POS which is position of desire coffee shop or library 
-   
+/*************************GOOGLE DIRECTIONS *************************************************/
+function getDirections(map) { // Pass POS which is position of desire coffee shop or library 
+    let map = new google.maps.Map(document.getElementById("googleMap"),{
+        zoom: 12,
+        center: {
+            lat: 33.6846,
+            lng: -117.8265
+        }
+    })
    console.log(navigator.geolocation);
 if (navigator.geolocation) {
    
@@ -201,11 +212,24 @@ if (navigator.geolocation) {
                 origin: currentPos,
                 destination: {lat:33.7385, lng:-117.8250 },
                 travelMode: "DRIVING",
+                avoidTolls: true, 
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
                 } 
             
             var directionsService = new google.maps.DirectionsService
-            directionsService.route(directionObjects, (response) => {
+            let display = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map: map,
+            });
+            directionsService.route(directionObjects, (response, status) => {
             directions = response.routes[0].legs[0].steps;
+            if (status === 'OK') {
+                if (previousRoute) {
+                    previousRoute.setMap(null);
+                }
+            }
+                previousRoute = display;
+                display.setDirections(response);
             // $('#info-box').empty();
             for (var i = 0; i < directions.length; i++) {
                 console.log(directions[i].instructions)

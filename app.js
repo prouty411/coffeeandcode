@@ -1,13 +1,47 @@
 $(document).ready(initializeApp);
+var previousRoute = false;
+
 
 function initializeApp() {
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
-    // $('#details-modal').modal('show');
+
+  
 
     
+
+    $('.location').click(getLocation);
+    $('.homeButton').click(home);
+    $(document).keypress(function(e) {
+        if(e.which == 13) {
+            e.preventDefault();
+            $("#search").click();
+        }
+    });
+  
+
+}
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+        console.log('error');
+    }
+}
+
+function showPosition(position) {
+    console.log ("Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude);
+}
+
+
+
+function home(){
+    localStorage.clear();
+    window.location.href = "index.html";
+
 }
 
 function displayMap() {
@@ -20,6 +54,7 @@ function displayMap() {
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     getYelpData(map);
+  
 }
 
 
@@ -40,6 +75,16 @@ function selectType() {
 }
 
 function initiateSearch() {
+    if (localStorage.getItem("types") === null){
+        $('#errorMessage').text('Please select cafe or library.');
+        $('#errorModal').modal("show");
+        return;
+    }
+    if($('#cityInput').val() === ''){
+        $('#errorMessage').text('Please input a city.');
+        $('#errorModal').modal("show");
+        return;
+    }
     let city = $('#cityInput').val();
     localStorage.setItem("city", `${city}`);
     window.location.href = "main.html";
@@ -118,7 +163,8 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
-            term: `${types}`,
+            // term: `${types}`,
+            term: 'coffee shop',
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             categories: `${types}, All`,
@@ -163,6 +209,7 @@ function getYelpData(map) {
                 var infowindow = new google.maps.InfoWindow({
                     content: content
                 });
+
                 if (types === `coffee`) {
                     icon = "./cafe.svg"
                 } else {
@@ -184,10 +231,11 @@ function getYelpData(map) {
                     return function () {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
-                        console.log(marker);
-                    };
+
+                    };  
                 })(marker, content, infowindow));
             }
+            getDirections();
         },
         error: function (err) {
             console.log("error");
@@ -195,3 +243,68 @@ function getYelpData(map) {
     }
     $.ajax(settings);
 }
+/*************************GOOGLE DIRECTIONS *************************************************/
+function getDirections() { // Pass POS which is position of desire coffee shop or library 
+    let map = new google.maps.Map(document.getElementById("googleMap"),{
+        zoom: 7,
+        center:   {lat: 33.6846,
+        lng: -117.8265 }
+    })
+if (navigator.geolocation) {
+   
+        navigator.geolocation.getCurrentPosition(function(position) {
+               var currentPos = {
+                 lat: position.coords.latitude,
+                 lng: position.coords.longitude
+              }
+              directionObjects = {
+                origin: currentPos,
+                destination: {lat:33.7385, lng:-117.8250 },
+                travelMode: "DRIVING",
+                avoidTolls: true, 
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
+                } 
+            
+            var directionsService = new google.maps.DirectionsService
+            let display = new google.maps.DirectionsRenderer({
+                draggable: true,
+                map: map,
+            });
+            directionsService.route(directionObjects, (response, status) => {
+            directions = response.routes[0].legs[0].steps;
+            if (status === 'OK') {
+                if (previousRoute) {
+                    previousRoute.setMap(null);
+                }
+            }
+                previousRoute = display;
+                display.setDirections(response);
+            // $('#info-box').empty();
+            for (var i = 0; i < directions.length; i++) {
+                console.log(directions[i].instructions)
+                    // var currentDirection = $("<p>").html(directions[i].instructions);
+                    // $('#info-box').append(currentDirection)
+                }
+                                    }); 
+            
+            })
+        }
+        
+// directionObjects = {
+//     origin: currentPos,
+//     destination: {lat:33.7385, lng:-117.8250 },
+//     travelMode: "DRIVING",
+//     } 
+
+// var directionsService = new google.maps.DirectionsService
+// directionsService.route(directionObjects, (response) => {
+// directions = response.routes[0].legs[0].steps;
+// // $('#info-box').empty();
+// for (var i = 0; i < directions.length; i++) {
+//     console.log(directions[i].instructions)
+//         // var currentDirection = $("<p>").html(directions[i].instructions);
+//         // $('#info-box').append(currentDirection)
+//     }
+//                         }); 
+    }
+

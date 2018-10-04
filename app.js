@@ -180,10 +180,10 @@ function getYelpData(map) {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
 
-                    };
+                    };  
                 })(marker, content, infowindow));
             }
-            getDirections(map);
+            getDirections();
         },
         error: function (err) {
             console.log("error");
@@ -192,15 +192,12 @@ function getYelpData(map) {
     $.ajax(settings);
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
-function getDirections(map) { // Pass POS which is position of desire coffee shop or library 
+function getDirections() { // Pass POS which is position of desire coffee shop or library 
     let map = new google.maps.Map(document.getElementById("googleMap"),{
-        zoom: 12,
-        center: {
-            lat: 33.6846,
-            lng: -117.8265
-        }
+        zoom: 7,
+        center:   {lat: 33.6846,
+        lng: -117.8265 }
     })
-   console.log(navigator.geolocation);
 if (navigator.geolocation) {
    
         navigator.geolocation.getCurrentPosition(function(position) {

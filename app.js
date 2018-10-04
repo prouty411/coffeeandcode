@@ -20,12 +20,16 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(showPosition);
     } else { 
         console.log('error');
+        $(".carouselContainer").addClass("hideCarousel");
+
     }
 }
 
 function showPosition(position) {
-    console.log ("Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude);
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    getCarouselYelpData(latitude,longitude);
+    $(".carouselContainer").removeClass("hideCarousel");
 }
 
 
@@ -94,6 +98,48 @@ function convertPhone(string) {
     return array.join('');
 }
 
+/******** API DATA FOR CAROUSEL******************************* */
+function getCarouselYelpData(latitude,longitude) {
+    var types;
+    if (localStorage.length) {
+        types = localStorage.getItem("types");
+        localStorage.clear();
+    }
+    var settings = {
+        "async": true,
+        "url": "https://yelp.ongandy.com/businesses",
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            term: `${types}`,
+            latitude: latitude,
+            longitude: longitude,
+            api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
+            categories: `${types}, All`,
+            sort_by: "rating",
+            radius: 8000,
+            limit: 10,
+        },
+        success: function (response) {
+            let {businesses} = response;
+            let result = businesses.map((eachPlace, index) => {
+                let {name, image_url, display_phone, phone, url, location: {address1, city, zip_code}} = eachPlace;
+                let image = $('<img>', {
+                    src: image_url,
+                    class: "img-fluid mx-auto d-block"
+                })
+                let infoDiv = $('<div>').addClass('carouselInfoDiv').append(name);
+                let carouselDiv = $('<div>').addClass('carousel-item col-md-3').append(image,infoDiv);
+                $('.carouselItems').append(carouselDiv);
+            })
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    }
+    $.ajax(settings);
+}
+
 /******** API DATA ******************************************* */
 function getYelpData(map) {
     var city;
@@ -102,7 +148,6 @@ function getYelpData(map) {
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
-        localStorage.clear();
     }
     var settings = {
 
@@ -111,8 +156,7 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
-            // term: `${types}`,
-            term: 'coffee shop',
+            term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             categories: `${types}, All`,
@@ -139,6 +183,7 @@ function getYelpData(map) {
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
             })
+            console.log('howards api', result);
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
@@ -216,6 +261,7 @@ if (navigator.geolocation) {
             
             })
         }
+    }
         
 // directionObjects = {
 //     origin: currentPos,
@@ -233,5 +279,6 @@ if (navigator.geolocation) {
 //         // $('#info-box').append(currentDirection)
 //     }
 //                         }); 
-    }
+//     }
 
+// f

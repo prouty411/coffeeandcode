@@ -1,4 +1,5 @@
 <html>
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,31 +30,11 @@
     </div>
     <div id="info-box" class="col-md-6 col-sm-12">
       <div class="resultContainer">
-        <!-- <div class="imageArea">
-          <img src="https://s3-media1.fl.yelpcdn.com/bphoto/P6ge2tZXGnkb7gXYiBkHyg/348s.jpg">
-        </div>
-        <div class="infoArea">
-          <div class="title">
-            <h2>Bardot</h2>
-          </div>
-          <h2 class="phone">
-            Phone: (714) 000 - 1234
-          </h2>
-          <h2 class="address">
-            662 El Camino Real Tustin, CA
-          </h2>
-          <h2 class="isOpen">
-            Currently Open ✅
-          </h2>
-          <div class="margin">
-
-          </div>
-        </div> -->
-      </div>       
+      </div>
     </div>
     <div id="footer" class="col-sm-12">
       <div class="container-fluid">
-        <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="9000">
+        <!-- <div id="carouselExample" class="carousel slide" data-ride="carousel" data-interval="9000">
           <div class="carousel-inner row w-100 mx-auto" role="listbox">
             <div class="carousel-item col-md-3 active">
               <img class="img-fluid mx-auto d-block" src="https://s3-media2.fl.yelpcdn.com/bphoto/nW-AJ_r63qaM_NR8RB53hQ/o.jpg"
@@ -96,13 +77,45 @@
             <span class="carousel-control-next-icon" style="height:70px;width:89px" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
           </a>
+        </div> -->
+      </div>
+    </div>
+  </div>
+  <!-- END OF FOOTER -->
+
+  <!-- START OF MODAL -->
+  <div class="modal fade" id="details-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title text-center" id="details-header" style="margin-left: auto"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+
+        </div>
+        <div class="modal-body" style="display:flex; justify-content: space-around; border-radius: 4px">
+          <div class="detailed-image">
+            <img src="https://s3-media4.fl.yelpcdn.com/bphoto/zciEPC7SUMLRuknQssZiMw/o.jpg">
+          </div>
+          <div class="text-center details-modal">
+            <p class="text-center detailed-address"></p>
+            <p class="text-center detailed-open"></p>
+            <p class="text-center detailed-price"></p>
+            <p class="text-center detailed-rating">4.5/5 stars</p>
+            <a href="" target="_blank" class="detailed-url">View Additional Info On Yelp</a>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="directions-button">Get Directions</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
-  
-  <!-- FOOTER -->
+
 
 
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzXoiyq4O3y_nP9Luo3oUz4rOpYl9vCtI&callback=displayMap&libraries=places"></script>

@@ -7,6 +7,11 @@ function initializeApp() {
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
+
+  
+
+    
+
     $('.location').click(getLocation);
     $('.homeButton').click(home);
     $(document).keypress(function(e) {
@@ -36,6 +41,7 @@ function showPosition(position) {
 function home(){
     localStorage.clear();
     window.location.href = "index.html";
+
 }
 
 function displayMap() {
@@ -91,11 +97,53 @@ function h2(text){
 function convertPhone(string) {
     string = string.slice(2); 
     let array = string.split(''); 
-
     array.unshift('(');
     array[3] = array[3] + ') ';
     array[6] = array[6] + '-';
     return array.join('');
+}
+
+function getDetailedYelpData(id){
+    console.log(id)
+    $('#details-modal').modal('show');
+    let ajaxOptions = {
+        'async': true,
+        "url": 'https://yelp.ongandy.com/businesses/details',
+        "method": 'POST',
+        "dataType": 'JSON',
+        "data": {
+            api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
+            id
+        },
+        success: function(response){
+            console.log(response);
+            //photos is an array of photos
+            //is_open_now is a boolean
+            let {hours, name, url, image_url, photos, price, rating, location: {display_address}, coordinates:{latitude, longitude}} = response;
+
+            let is_open_now = hours[0].is_open_now;
+            photos = photos[2]
+            display_address = display_address[0] + ' ' + display_address[1];
+            console.log(display_address);
+            $('#details-header').text(name);
+            $('.detailed-image > img').attr('src', photos);
+            $('.detailed-address').text(display_address)
+            $('.detailed-open').text(`${is_open_now ? 'Open Now ✅' : 'Currently Closed ❌'}`);
+            $('.detailed-price').text(`Price range: ${price}`);
+            $('.detailed-rating').text(`${rating}/5 stars`);
+            $('.detailed-url').attr('href', url);
+            $('#directions-button').on('click', function(){
+                getDirections(longitude, latitude);
+            })
+
+
+        },
+        error: function(error){
+            console.log(error);
+        }
+    }
+   
+    $.ajax(ajaxOptions);
 }
 
 /******** API DATA ******************************************* */
@@ -128,7 +176,7 @@ function getYelpData(map) {
             let {businesses} = response;
             console.log(businesses)
             let result = businesses.map((eachPlace, index) => {
-                let {name, image_url, is_closed, display_phone, phone, url, location: {address1, city, zip_code}} = eachPlace;
+                let {id, name, image_url, is_closed, display_phone, phone, url, price, rating, location: {address1, city, zip_code}} = eachPlace;
                 let image = $('<img>', {
                     src: image_url
                 })
@@ -137,12 +185,16 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let isOpenElem = h2(`${is_closed ? 'Currently Open ✅ ' : 'Currently Closed ❌'}`).addClass('isOpen');
-                let marginElem = $('<div>').addClass('margin')
-                infoAreaElem.append(titleElem, phoneElem, addressElem, isOpenElem, marginElem);
+                let moreInfoElem = $('<div>').addClass('moreInfo').text('More Info')
+                infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
+                moreInfoElem.on('click', function(){
+                    console.log(id);
+                    getDetailedYelpData(id);
+                })
             })
+
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude

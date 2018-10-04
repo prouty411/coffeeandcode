@@ -78,3 +78,10 @@ input::placeholder{
 
     border: 10px solid rgba(81, 203, 238, 1);
 }
+.modal-body{
+    display: flex !important;
+    justify-content: space-around !important;
+}
+.details-header{
+    margin-left: auto !important;
+}

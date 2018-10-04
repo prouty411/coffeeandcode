@@ -17,7 +17,7 @@ html {
 body {
     background: #ffece6;
     background: #cc9766;
-    background: linear-gradient(to bottom, rgba(233, 185, 112, 0.986), rgb(233, 171, 195));
+    background: linear-gradient(to bottom, rgba(245, 224, 203, 0.897), rgb(130, 95, 165));
 }
 
 .navbar {
@@ -124,6 +124,15 @@ body {
     text-align: center;
 }
 
+.moreInfo {
+    text-align: center;
+    color: mediumblue;
+    text-decoration: underline;
+    font-size: 2em;
+}
+.moreInfo:hover{
+    cursor: pointer;
+}
 
 
 

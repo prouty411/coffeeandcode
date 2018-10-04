@@ -8,37 +8,38 @@ function initializeApp() {
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
 
-  
 
-    
+
+
 
     $('.location').click(getLocation);
     $('.homeButton').click(home);
-    $(document).keypress(function(e) {
-        if(e.which == 13) {
+    $(document).keypress(function (e) {
+        if (e.which == 13) {
             e.preventDefault();
             $("#search").click();
         }
     });
-  
+
 
 }
+
 function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
-    } else { 
+    } else {
         console.log('error');
     }
 }
 
 function showPosition(position) {
-    console.log ("Latitude: " + position.coords.latitude + 
-    "<br>Longitude: " + position.coords.longitude);
+    console.log("Latitude: " + position.coords.latitude +
+        "<br>Longitude: " + position.coords.longitude);
 }
 
 
 
-function home(){
+function home() {
     localStorage.clear();
     window.location.href = "index.html";
 
@@ -54,7 +55,7 @@ function displayMap() {
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     getYelpData(map);
-  
+
 }
 
 
@@ -75,12 +76,12 @@ function selectType() {
 }
 
 function initiateSearch() {
-    if (localStorage.getItem("types") === null){
+    if (localStorage.getItem("types") === null) {
         $('#errorMessage').text('Please select cafe or library.');
         $('#errorModal').modal("show");
         return;
     }
-    if($('#cityInput').val() === ''){
+    if ($('#cityInput').val() === '') {
         $('#errorMessage').text('Please input a city.');
         $('#errorModal').modal("show");
         return;
@@ -91,19 +92,20 @@ function initiateSearch() {
 
 }
 
-function h2(text){
+function h2(text) {
     return $('<h3>').text(text);
 }
+
 function convertPhone(string) {
-    string = string.slice(2); 
-    let array = string.split(''); 
+    string = string.slice(2);
+    let array = string.split('');
     array.unshift('(');
     array[3] = array[3] + ') ';
     array[6] = array[6] + '-';
     return array.join('');
 }
 
-function getDetailedYelpData(id){
+function getDetailedYelpData(id) {
     console.log(id)
     $('#details-modal').modal('show');
     let ajaxOptions = {
@@ -115,11 +117,26 @@ function getDetailedYelpData(id){
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             id
         },
-        success: function(response){
+        success: function (response) {
             console.log(response);
             //photos is an array of photos
             //is_open_now is a boolean
-            let {hours, name, url, image_url, photos, price, rating, location: {display_address}, coordinates:{latitude, longitude}} = response;
+            let {
+                hours,
+                name,
+                url,
+                image_url,
+                photos,
+                price,
+                rating,
+                location: {
+                    display_address
+                },
+                coordinates: {
+                    latitude,
+                    longitude
+                }
+            } = response;
 
             let is_open_now = hours[0].is_open_now;
             photos = photos[2]
@@ -132,17 +149,17 @@ function getDetailedYelpData(id){
             $('.detailed-price').text(`Price range: ${price}`);
             $('.detailed-rating').text(`${rating}/5 stars`);
             $('.detailed-url').attr('href', url);
-            $('#directions-button').on('click', function(){
+            $('#directions-button').on('click', function () {
                 getDirections(longitude, latitude);
             })
 
 
         },
-        error: function(error){
+        error: function (error) {
             console.log(error);
         }
     }
-   
+
     $.ajax(ajaxOptions);
 }
 
@@ -164,7 +181,7 @@ function getYelpData(map) {
         "dataType": "JSON",
         "data": {
             // term: `${types}`,
-            term: 'coffee shop',
+            term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
             categories: `${types}, All`,
@@ -173,10 +190,27 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
-            let {businesses} = response;
+            let {
+                businesses
+            } = response;
             console.log(businesses)
             let result = businesses.map((eachPlace, index) => {
-                let {id, name, image_url, is_closed, display_phone, phone, url, price, rating, location: {address1, city, zip_code}} = eachPlace;
+                let {
+                    id,
+                    name,
+                    image_url,
+                    is_closed,
+                    display_phone,
+                    phone,
+                    url,
+                    price,
+                    rating,
+                    location: {
+                        address1,
+                        city,
+                        zip_code
+                    }
+                } = eachPlace;
                 let image = $('<img>', {
                     src: image_url
                 })
@@ -189,7 +223,7 @@ function getYelpData(map) {
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
-                moreInfoElem.on('click', function(){
+                moreInfoElem.on('click', function () {
                     console.log(id);
                     getDetailedYelpData(id);
                 })
@@ -232,10 +266,10 @@ function getYelpData(map) {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
 
-                    };  
+                    };
                 })(marker, content, infowindow));
             }
-            getDirections();
+
         },
         error: function (err) {
             console.log("error");
@@ -244,67 +278,77 @@ function getYelpData(map) {
     $.ajax(settings);
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
-function getDirections() { // Pass POS which is position of desire coffee shop or library 
-    let map = new google.maps.Map(document.getElementById("googleMap"),{
+function getDirections(long, lat) { // Pass POS which is position of desire coffee shop or library 
+    var cafePOS = {
+        lat: lat,
+        lng: long
+    }
+    console.log(lat, long)
+    let map = new google.maps.Map(document.getElementById("googleMap"), {
         zoom: 7,
-        center:   {lat: 33.6846,
-        lng: -117.8265 }
+        center: {
+            lat: 33.6846,
+            lng: -117.8265
+        }
     })
-if (navigator.geolocation) {
-   
-        navigator.geolocation.getCurrentPosition(function(position) {
-               var currentPos = {
-                 lat: position.coords.latitude,
-                 lng: position.coords.longitude
-              }
-              directionObjects = {
+    if (navigator.geolocation) {
+
+        navigator.geolocation.getCurrentPosition(function (position) {
+            var currentPos = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            }
+            console.log(currentPos);
+            console.log(cafePOS);
+            directionObjects = {
                 origin: currentPos,
-                destination: {lat:33.7385, lng:-117.8250 },
+                destination: cafePOS,
                 travelMode: "DRIVING",
-                avoidTolls: true, 
+                avoidTolls: true,
                 unitSystem: google.maps.UnitSystem.IMPERIAL,
-                } 
-            
+            }
+
             var directionsService = new google.maps.DirectionsService
             let display = new google.maps.DirectionsRenderer({
                 draggable: true,
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
-            directions = response.routes[0].legs[0].steps;
-            if (status === 'OK') {
-                if (previousRoute) {
-                    previousRoute.setMap(null);
-                }
-            }
-                previousRoute = display;
-                display.setDirections(response);
-            // $('#info-box').empty();
-            for (var i = 0; i < directions.length; i++) {
-                console.log(directions[i].instructions)
-                    // var currentDirection = $("<p>").html(directions[i].instructions);
-                    // $('#info-box').append(currentDirection)
-                }
-                                    }); 
-            
-            })
-        }
-        
-// directionObjects = {
-//     origin: currentPos,
-//     destination: {lat:33.7385, lng:-117.8250 },
-//     travelMode: "DRIVING",
-//     } 
+                console.log(response);
+                directions = response.routes[0].legs[0].steps;
+                if (status === 'OK') {
+                    if (previousRoute) {
+                        previousRoute.setMap(null);
+                    }
+                    previousRoute = display;
+                    display.setDirections(response);
+                    $('#info-box').empty();
+                    for (var i = 0; i < directions.length; i++) {
 
-// var directionsService = new google.maps.DirectionsService
-// directionsService.route(directionObjects, (response) => {
-// directions = response.routes[0].legs[0].steps;
-// // $('#info-box').empty();
-// for (var i = 0; i < directions.length; i++) {
-//     console.log(directions[i].instructions)
-//         // var currentDirection = $("<p>").html(directions[i].instructions);
-//         // $('#info-box').append(currentDirection)
-//     }
-//                         }); 
+                        var currentDirection = $("<p>").html(directions[i].instructions);
+                        $('#info-box').append(currentDirection)
+                    }
+                    $('#details-modal').modal('hide');
+                }
+            });
+
+        })
     }
 
+    // directionObjects = {
+    //     origin: currentPos,
+    //     destination: {lat:33.7385, lng:-117.8250 },
+    //     travelMode: "DRIVING",
+    //     } 
+
+    // var directionsService = new google.maps.DirectionsService
+    // directionsService.route(directionObjects, (response) => {
+    // directions = response.routes[0].legs[0].steps;
+    // // $('#info-box').empty();
+    // for (var i = 0; i < directions.length; i++) {
+    //     console.log(directions[i].instructions)
+    //         // var currentDirection = $("<p>").html(directions[i].instructions);
+    //         // $('#info-box').append(currentDirection)
+    //     }
+    //                         }); 
+}

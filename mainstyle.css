@@ -31,7 +31,9 @@ body {
     width: 100%;
     margin: 0 auto;
 }
-
+.hideCarousel{
+    display: none;
+}
 
 h1 {
     text-align: center;
@@ -82,7 +84,9 @@ body {
     width: 100%;
 }
 
-.carousel-item {
+
+.img-fluid{
+    height: 14vh;
 }
 
 .carousel {

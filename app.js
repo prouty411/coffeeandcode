@@ -12,6 +12,7 @@ function initializeApp() {
     $('#coffee').click(selectType);
     $('.location').click(getLocation);
     $('.homeButton').click(home);
+    getLocation();
     $(document).keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();

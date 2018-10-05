@@ -26,12 +26,17 @@ function getLocation() {
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
         console.log('error');
+        $(".carouselContainer").addClass("hideCarousel");
+
     }
 }
 
 function showPosition(position) {
-    console.log("Latitude: " + position.coords.latitude +
-        "<br>Longitude: " + position.coords.longitude);
+    let latitude = position.coords.latitude;
+    let longitude = position.coords.longitude;
+    getCarouselYelpData(latitude, longitude);
+    $(".carouselContainer").removeClass("hideCarousel");
+
 }
 
 
@@ -61,7 +66,6 @@ function selectType() {
     //if what we click is highlited...
     if ($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
-        // localStorage.clear();
     }
     //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
@@ -72,10 +76,12 @@ function selectType() {
     }
 
 }
-function appendCity(){
+
+function appendCity() {
     let citySearched = localStorage.getItem('city');
     $('.city-name').text('City Searched: ' + citySearched);
 }
+
 function initiateSearch() {
     if (localStorage.getItem("types") === null) {
         $('#errorMessage').text('Please select cafe or library.');
@@ -104,6 +110,7 @@ function convertPhone(string) {
     array[6] = array[6] + '-';
     return array.join('');
 }
+
 function getDetailedYelpData(id, map) {
     $('#details-modal').modal('show');
     let ajaxOptions = {
@@ -161,6 +168,61 @@ function getDetailedYelpData(id, map) {
     $.ajax(ajaxOptions);
 }
 
+/******** API DATA FOR CAROUSEL******************************* */
+function getCarouselYelpData(latitude, longitude) {
+    var types;
+    if (localStorage.length) {
+        types = localStorage.getItem("types");
+        localStorage.clear();
+    }
+    var settings = {
+        "async": true,
+        "url": "https://yelp.ongandy.com/businesses",
+        "method": "POST",
+        "dataType": "JSON",
+        "data": {
+            term: `${types}`,
+            latitude: latitude,
+            longitude: longitude,
+            api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
+            categories: `${types}, All`,
+            sort_by: "rating",
+            radius: 8000,
+            limit: 10,
+        },
+        success: function (response) {
+            let {
+                businesses
+            } = response;
+            let result = businesses.map((eachPlace, index) => {
+                let {
+                    name,
+                    image_url,
+                    display_phone,
+                    phone,
+                    url,
+                    location: {
+                        address1,
+                        city,
+                        zip_code
+                    }
+                } = eachPlace;
+                let image = $('<img>', {
+                    src: image_url,
+                    class: "img-fluid mx-auto d-block"
+                })
+                let infoDiv = $('<div>').addClass('carouselInfoDiv').append(name);
+                let carouselDiv = $('<div>').addClass('carousel-item col-md-3').append(image, infoDiv);
+                $('.carouselItems').append(carouselDiv);
+            })
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    }
+    $.ajax(settings);
+}
+
 /******** API DATA ******************************************* */
 function getYelpData(map) {
     var city;
@@ -169,7 +231,7 @@ function getYelpData(map) {
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
-        // localStorage.clear();
+
     }
     var settings = {
 
@@ -178,7 +240,7 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
-            // term: `${types}`,
+
             term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
@@ -220,12 +282,10 @@ function getYelpData(map) {
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
-                moreInfoElem.on('click', function () {
-                
+                moreInfoElem.on('click', function () {     
                     getDetailedYelpData(id,map);
                 })
             })
-
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
@@ -262,9 +322,9 @@ function getYelpData(map) {
                 google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
                     currWindow = false;
                     return function () {
-                        if( lastMarker ) {
+                        if (lastMarker) {
                             lastMarker.close();
-                         }
+                        }
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
                         lastMarker = infowindow;
@@ -330,8 +390,10 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     // var currentDirection = $("<p>").html(directions[i].instructions);
                     // $('#info-box').append(currentDirection)
                 }
+
             });
 
         })
     }
 }
+

@@ -268,7 +268,7 @@ function getYelpData(map) {
                         infowindow.setContent(content);
                         infowindow.open(map, marker);
                         lastMarker = infowindow;
-                        $(".markerInfo").click(() => getDetailedYelpData(this.id).bind(this));
+                        $(".markerInfo").click(() => getDetailedYelpData(this.id, map));
 
                     };
                 })(marker, content, infowindow));
@@ -288,7 +288,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
         lng: long
     }
     if (navigator.geolocation) {
-
+        console.log("here in nav: google directions")
         navigator.geolocation.getCurrentPosition(function (position) {
             var currentPos = {
                 lat: position.coords.latitude,
@@ -301,13 +301,14 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 avoidTolls: true,
                 unitSystem: google.maps.UnitSystem.IMPERIAL,
             }
-
+            console.log(directionObjects);
             var directionsService = new google.maps.DirectionsService
             let display = new google.maps.DirectionsRenderer({
                 draggable: false,
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
+                console.log(response)
                 directions = response.routes[0].legs[0].steps;
                 if (status === 'OK') {
                     if (previousRoute) {

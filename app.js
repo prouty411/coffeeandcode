@@ -8,6 +8,7 @@ var lastMarker = false;
 function initializeApp() {
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
+    $('.backButton').click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
     $('.location').click(getLocation);
@@ -93,6 +94,10 @@ function initiateSearch() {
         $('#errorModal').modal("show");
         return;
     }
+    if(localStorage.city){
+        window.location.href = "main.html";
+        return;
+    }
     let city = $('#cityInput').val();
     localStorage.setItem("city", `${city}`);
     window.location.href = "main.html";
@@ -173,7 +178,6 @@ function getCarouselYelpData(latitude, longitude) {
     var types;
     if (localStorage.length) {
         types = localStorage.getItem("types");
-        localStorage.clear();
     }
     var settings = {
         "async": true,
@@ -343,6 +347,7 @@ function getYelpData(map) {
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
 function getDirections(long, lat, map) { // Pass POS which is position of desire coffee shop or library 
+    $('.backButton').css("visibility","visible");
     var cafePOS = {
         lat: lat,
         lng: long

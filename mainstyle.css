@@ -22,15 +22,17 @@ body {
     border-bottom: 1px solid black;
 }
 .homeButton{
+    margin-left: 1vh;
+    margin-top: 1vh;
     color: white;
     background-color: black;
     width: auto;
 }
 .city-name{
-    margin-left: 11%;
+    margin-left: 16%;
     font-weight: bold;
     color: black;
-    font-size:2.5rem;
+    font-size:181%;
 }
 .header {
     width: 100%;
@@ -171,3 +173,9 @@ img {
     width: 200px;
 }
 
+
+@media only screen and (max-width: 768px) {
+    #info-box{
+        margin-top: 9%;
+    }
+    }

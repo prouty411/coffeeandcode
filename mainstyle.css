@@ -8,9 +8,7 @@ html {
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: 'Shadows Into Light Two',
-        cursive;
-        font-family: Quicksand;
+    font-family: "Comic Sans MS", cursive, sans-serif;
 }
 
 body {
@@ -24,8 +22,17 @@ body {
     border-bottom: 1px solid black;
 }
 .homeButton{
-    /* height: 6vh; */
+    margin-left: 1vh;
+    margin-top: 1vh;
+    color: white;
+    background-color: black;
     width: auto;
+}
+.city-name{
+    margin-left: 16%;
+    font-weight: bold;
+    color: black;
+    font-size:181%;
 }
 .header {
     width: 100%;
@@ -101,7 +108,7 @@ body {
 }
 .resultContainer{
     display: flex;
-    margin-top: 2%;
+    margin-top: 9%;
     color: black;
     flex-wrap: wrap;
     align-items: center;
@@ -166,3 +173,9 @@ img {
     width: 200px;
 }
 
+
+@media only screen and (max-width: 768px) {
+    #info-box{
+        margin-top: 9%;
+    }
+    }

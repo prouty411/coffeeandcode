@@ -6,9 +6,16 @@ var lastMarker = false;
 
 
 function initializeApp() {
+   if (window.location.pathname === '/index.html') {
+    localStorage.clear();
+   }
+   if (window.location.pathname ==='/main.html') {
+       if (window.localStorage.length === 0) {
+           home();
+       }
+   }
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
-    $('.backButton').click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
     $('.location').click(getLocation);
@@ -348,7 +355,6 @@ function getYelpData(map) {
 }
 /*************************GOOGLE DIRECTIONS *************************************************/
 function getDirections(long, lat, map) { // Pass POS which is position of desire coffee shop or library 
-    $('.backButton').css("visibility","visible");
     var cafePOS = {
         lat: lat,
         lng: long
@@ -376,18 +382,27 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
             directionsService.route(directionObjects, (response, status) => {
                 console.log(response)
                 directions = response.routes[0].legs[0].steps;
+                var estimateTime = response.routes[0].legs[0];
                 if (status === 'OK') {
                     if (previousRoute) {
                         previousRoute.setMap(null);
                     }
                     previousRoute = display;
                     display.setDirections(response);
+                    console.log(response);
                     $('#info-box').empty();
+                    var distance = $("<p>").html("<b>Estimated Distance</b>: " + estimateTime.distance.text)
+                    var travelTime = $("<p>").html("<b>Estimated Travel TimeTime </b>: " + estimateTime.duration.text)
+                    var directionDiv = $('<div>').addClass('directions');
                     for (var i = 0; i < directions.length; i++) {
 
                         var currentDirection = $("<p>").html(directions[i].instructions);
-                        $('#info-box').append(currentDirection)
+                        $(directionDiv).append(currentDirection)
                     }
+                    var backbutton = $("<button>").addClass("backButton").text("Back");
+                    $(directionDiv).append(distance, travelTime, backbutton);
+                    $('#info-box').append(directionDiv)
+                    $('.backButton').click(initiateSearch)
                     $('#details-modal').modal('hide');
                 }
                 previousRoute = display;

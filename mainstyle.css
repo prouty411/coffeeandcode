@@ -1,9 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
 @import url('https://fonts.googleapis.com/css?family=Shadows+Into+Light+Two');
 
-html {
-}
-
 * {
     box-sizing: border-box;
     padding: 0;
@@ -29,10 +26,11 @@ body {
     width: auto;
 }
 .city-name{
-    margin-left: 16%;
+    /* margin-left: 16%; */
     font-weight: bold;
     color: black;
-    font-size:181%;
+    font-size:150%;
+    text-align: center;
 }
 .header {
     width: 100%;
@@ -72,7 +70,8 @@ h1 {
 }
 
 .backButton{
-    visibility: hidden;
+   
+   
 }
 
 .container-fluid {
@@ -147,13 +146,18 @@ body {
     cursor: pointer;
 }
 
+.place-search { 
+    display: flex;
+    justify-content: center;
+   
+}
 
-
-
-
-
-
-
+.directions {
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+  
+}
 
 
 @media only screen and (max-width: 791px) {

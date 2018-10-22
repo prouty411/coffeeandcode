@@ -395,8 +395,78 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var travelTime = $("<p>").html("<b>Estimated Travel TimeTime </b>: " + estimateTime.duration.text)
                     var directionDiv = $('<div>').addClass('directions');
                     for (var i = 0; i < directions.length; i++) {
-
+                        console.log(directions[i].maneuver)
                         var currentDirection = $("<p>").html(directions[i].instructions);
+                        if(directions[i].maneuver) {
+                            
+                            var icon;
+                            var step  = directions[i].maneuver
+                            switch(step) {
+                                case "ferry":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "ferry-train":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "fork-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break; 
+                                case "fork-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "keep-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "keep-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "merge":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "ramp-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "ramp-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "roundabout-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "roundabout-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "straight":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-sharp-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-sharp-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-slight-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "turn-slight-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "uturn-left":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                                case "uturn-right":
+                                icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
+                                break;
+                            }
+                       
+                        $(currentDirection).append(icon);
+                        }
+
                         $(directionDiv).append(currentDirection)
                     }
                     var backbutton = $("<button>").addClass("backButton").text("Back");

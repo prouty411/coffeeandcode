@@ -125,6 +125,9 @@ function h2(text) {
 }
 
 function convertPhone(string) {
+    if(string === 'Unavailable'){
+        return 'Phone # Unavailable'
+    }
     string = string.slice(2);
     let array = string.split('');
     array.unshift('(');
@@ -291,6 +294,10 @@ function getYelpData(map) {
                         zip_code
                     }
                 } = eachPlace;
+                console.log('type>>>>>>>>>', typeof phone)
+                if(phone === 'undefined' || !phone){
+                    phone = 'Unavailable'
+                }
                 let image = $('<img>', {
                     src: image_url
                 })
@@ -478,7 +485,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
 
                         $(directionDiv).append(currentDirection)
                     }
-                    var backbutton = $("<button>").addClass("backButton").text("Back");
+                    var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     $(directionDiv).append(distance, travelTime, backbutton);
                     $('#info-box').append(directionDiv)
                     $('.backButton').click(initiateSearch)

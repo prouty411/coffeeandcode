@@ -5,7 +5,7 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-family: "Apple Chancery", cursive;
 }
 
 body {
@@ -71,7 +71,11 @@ h1 {
 }
 
 .backButton{
-   
+    cursor: pointer;
+    color: white;
+    background-color: black;
+    border: 0px;
+    width: 5vw
    
 }
 
@@ -107,6 +111,8 @@ body {
     border-radius: 5px;
 }
 .resultContainer{
+    border: 2px black;
+    border-style: solid;
     display: flex;
     margin-bottom: 2%;
     color: black;

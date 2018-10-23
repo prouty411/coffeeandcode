@@ -34,7 +34,6 @@ function getLocation() {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
-        console.log('error');
         $(".carouselContainer").addClass("hideCarousel");
 
     }
@@ -235,6 +234,11 @@ function getCarouselYelpData(latitude, longitude) {
     $.ajax(settings);
 }
 
+function invalidSearchReturnHome(){
+    $('#errorMessage').text('No results were found.');
+    $('#errorModal').modal("show");
+}
+
 /******** API DATA ******************************************* */
 function getYelpData(map) {
     var city;
@@ -262,6 +266,12 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
+            if(response.success === false){
+                window.location.href = "index.html";
+                invalidSearchReturnHome();
+                return;
+
+            }
             let {
                 businesses
             } = response;

@@ -8,8 +8,7 @@ html{
     box-sizing: border-box;
     padding: 0;
     margin: 0;
-    font-family: 'Shadows Into Light Two',
-    cursive;
+    font-family: "Apple Chancery", cursive;
 }
 body{
     background: #C78989;
@@ -20,8 +19,10 @@ body{
     background-repeat: no-repeat;
 }
 .container > h1{
-    font-family: 'Shadows Into Light Two',
-    cursive;
+    /* font-family: 'Shadows Into Light Two', */
+    /* cursive; */
+    font-family: 'Apple Chancery', cursive;
+
     text-align: center;
     color: white;
     font-size: 5em;

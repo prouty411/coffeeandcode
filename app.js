@@ -390,7 +390,10 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
-                console.log(response)
+                if(!response.routes[0]){
+                    $(".noDirections").css('visibility', 'visible');
+                    return;
+                }
                 directions = response.routes[0].legs[0].steps;
                 var estimateTime = response.routes[0].legs[0];
                 if (status === 'OK') {

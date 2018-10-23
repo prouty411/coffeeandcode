@@ -16,6 +16,16 @@ body {
 
 }
 
+#errorMessage{
+    text-align: center;
+}
+.noDirections{
+    color: red;
+    visibility: hidden;
+    margin: 0px;
+    margin-right: 6% !important;
+}
+
 .navbar {
     border-bottom: 1px solid black;
 }

@@ -83,7 +83,7 @@ function displayMap() {
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
     console.log("here")
     console.log(window.localStorage.getItem('city'));
-    console.log(window.localStorage.getItem('types'));
+    console.log(window.localStorage.getItem('types')); 
     getYelpData(map);
     
 
@@ -138,12 +138,8 @@ function initiateSearch() {
     if (localStorage.getItem('city')) {
         city = localStorage.getItem('city');
     }
- 
- 
-    let types = localStorage.getItem("types");
     localStorage.setItem("city", `${city}`);
-    localStorage.setItem("types", `${types}`)
-    window.location.href = `main.html?city=${city}&type=${types}`;
+    getYelpData();
     // window.location.pathname = `\?city=${city}&type=${types}`
 }
 
@@ -286,6 +282,13 @@ function getYelpData(map) {
         types = localStorage.getItem("types");
         console.log("city and types", city, types)
     }
+    if (window.location.pathname === "/index.html") {
+        localStorage.setItem("types", `${types}`);
+        var city = localStorage.getItem("city");
+        var types = localStorage.getItem("types");
+        console.log("test", city, types);
+    }
+  
     var settings = {
 
         "async": true,
@@ -293,7 +296,6 @@ function getYelpData(map) {
         "method": "POST",
         "dataType": "JSON",
         "data": {
-
             term: `${types}`,
             location: `${city}`,
             api_key: "w5ThXNvXEMnLlZYTNrvrh7Mf0ZGQNFhcP6K-LPzktl8NBZcE1_DC7X4f6ZXWb62mV8HsZkDX2Zc4p86LtU0Is9kI0Y0Ug0GvwC7FvumSylmNLfLpeikscQZw41pXW3Yx",
@@ -303,7 +305,25 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
-            console.log(response)
+            console.log(settings);
+        if (window.location.pathname === "/index.html") {
+            console.log(response);
+            if (response) {
+                if (response.success === false) { 
+                    console.log("ZERO RESULTS")
+                    $('#errorMessage').text('Invalid City or No Search Results found');
+                    $('#errorModal').modal("show");
+                    localStorage.removeItem('city')
+                    return;
+                }
+                city = localStorage.getItem("city");
+                types = localStorage.getItem("types");
+                window.location.href = `main.html?city=${city}&type=${types}`
+            }
+           
+           
+            
+        } 
             let {
                 businesses
             } = response;
@@ -324,7 +344,6 @@ function getYelpData(map) {
                         zip_code
                     }
                 } = eachPlace;
-                console.log('type>>>>>>>>>', typeof phone)
                 if(phone === 'undefined' || !phone){
                     phone = 'Unavailable'
                 }
@@ -396,7 +415,7 @@ function getYelpData(map) {
                // })(marker, content, infowindow));
             }
           
-        },
+    console.log(response)},
         error: function (err) {
             console.log("error");
         }

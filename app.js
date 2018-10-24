@@ -28,7 +28,7 @@ function initializeApp() {
    }
 
     
-
+    $('#close-modal').click(function() {$('.detailed-image > img').attr('src', "images/loader.gif")});
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
@@ -208,6 +208,7 @@ function getDetailedYelpData(id, map) {
             $('.detailed-rating').text(`${rating}/5 stars`);
             $('.detailed-url').attr('href', url);
             $('#directions-button').on('click', function () {
+                $('.img-loader').toggle("hidden")
                 getDirections(longitude, latitude, map);
             })
 
@@ -431,6 +432,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 console.log(response)
                 if (!response.routes.length) {
                     $('#details-modal').modal('hide');
+                    $('.detailed-image > img').attr('src', "images/loader.gif")
                     $('#info-box').empty();
                     console.log("unavailable routes");
                     var backbutton = $("<button>").addClass("backButton").text("Back");
@@ -533,7 +535,10 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     $(directionDiv).append(distance, travelTime, backbutton);
                     $('#info-box').append(directionDiv)
                     $('.backButton').click(initiateSearch)
+                    $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');
+                    $('.detailed-image > img').attr('src', "images/loader.gif")
+                 
                 }
                 previousRoute = display;
                 display.setDirections(response);

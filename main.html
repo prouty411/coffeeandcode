@@ -23,7 +23,7 @@
     <button class="btn homeButton">Home 🏠</button> 
     
 
-    <h1>Coffee & Code👨‍💻👩‍💻☕</h1>
+    <h1><div>☕👩‍💻</div>Coffee and Code<div>👨‍💻☕</div></h1>
 
   </div>
   <div class="container-fluid">
@@ -31,7 +31,6 @@
       <div id="googleMap"></div>
     </div>
     <div id="info-box" class="col-md-6 col-sm-12">
-      <p>Scroll Down For More👇</p>
     </div>
     <div class="footer col-md-12 col-sm-12">
         <span class="city-name">City Searched: Irvine</span>
@@ -48,14 +47,14 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title text-center" id="details-header" style="margin-left: auto"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button"  id = "close-modal" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
 
         </div>
         <div class="modal-body" style="display:flex; justify-content: space-around; border-radius: 4px">
           <div class="detailed-image">
-            <img src="">
+            <img src="images/loader.gif">
           </div>
           <div class="text-center details-modal">
             <p class="text-center detailed-address"></p>
@@ -66,13 +65,14 @@
           </div>
         </div>
         <div class="modal-footer">
+          <div class="img-loader hidden"></div>
           <button type="button" class="btn btn-primary" id="directions-button">Get Directions</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzXoiyq4O3y_nP9Luo3oUz4rOpYl9vCtI&libraries=places"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzXoiyq4O3y_nP9Luo3oUz4rOpYl9vCtI&callback=displayMap&libraries=places"></script>
 </body>
 
 </html>

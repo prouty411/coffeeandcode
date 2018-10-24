@@ -10,10 +10,25 @@ function initializeApp() {
     localStorage.clear();
    }
    if (window.location.pathname ==='/main.html') {
+    if (window.location.href.includes('?city')) {
+        var url = window.location.href.split('?');
+        params = url[1].split('&');
+        city   =  params[0].split('=')
+        localStorage.setItem('city', `${city[1]}`)
+        types   =  params[1].split('=')
+        localStorage.setItem('types', `${types[1]}`)
+        displayMap();
+    }
+   
        if (window.localStorage.length === 0) {
            home();
        }
+  
+
    }
+
+    
+
     $('#carousel').carousel();
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
@@ -66,7 +81,11 @@ function displayMap() {
         }
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
+    console.log("here")
+    console.log(window.localStorage.getItem('city'));
+    console.log(window.localStorage.getItem('types'));
     getYelpData(map);
+    
 
 }
 
@@ -102,13 +121,21 @@ function initiateSearch() {
         $('#errorModal').modal("show");
         return;
     }
-    if(localStorage.city){
-        window.location.href = "main.html";
-        return;
-    }
+    // if(localStorage.city){
+    //     window.location.href = "main.html";
+    //     return;
+    // }
     let city = $('#cityInput').val();
+    if (localStorage.getItem('city')) {
+        city = localStorage.getItem('city');
+    }
+ 
+ 
+    let types = localStorage.getItem("types");
     localStorage.setItem("city", `${city}`);
-    window.location.href = "main.html";
+    localStorage.setItem("types", `${types}`)
+    window.location.href = `main.html?city=${city}&type=${types}`;
+    // window.location.pathname = `\?city=${city}&type=${types}`
 }
 
 function h2(text) {
@@ -155,8 +182,9 @@ function getDetailedYelpData(id, map) {
                     longitude
                 }
             } = response;
-
-            let is_open_now = hours[0].is_open_now;
+            if (hours) {
+            var is_open_now = hours[0].is_open_now;
+            }
             photos = photos[2]
             display_address = display_address[0] + ' ' + display_address[1];
             console.log(display_address);
@@ -243,7 +271,7 @@ function getYelpData(map) {
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
-
+        console.log("city and types", city, types)
     }
     var settings = {
 
@@ -262,6 +290,7 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
+            console.log(response)
             let {
                 businesses
             } = response;
@@ -298,10 +327,12 @@ function getYelpData(map) {
                     getDetailedYelpData(id,map);
                 })
             })
+            
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
             })
+
             for (var index = 0; index < response.businesses.length; index++) {
                 var pos = {
                     lat: response.businesses[index].coordinates.latitude,
@@ -331,21 +362,23 @@ function getYelpData(map) {
                     icon: icon,
                     id: response.businesses[index].id
                 });
-                google.maps.event.addListener(marker, 'click', (function (marker, content, infowindow) {
-                    currWindow = false;
-                    return function () {
-                        if (lastMarker) {
-                            lastMarker.close();
-                        }
-                        infowindow.setContent(content);
-                        infowindow.open(map, marker);
-                        lastMarker = infowindow;
-                        $(".markerInfo").click(() => getDetailedYelpData(this.id, map));
+                google.maps.event.addListener(marker, 'click',
+            function() {getDetailedYelpData(this.id, map)})
+                //(function (marker, content, infowindow) {
+                   // currWindow = false;
+                    // return function () {
+                       // if (lastMarker) {
+                         //   lastMarker.close();
+                        //}
+                       // infowindow.setContent(content);
+                       // infowindow.open(map, marker);
+                       // lastMarker = infowindow;
+                       // $(".markerInfo").click(() => getDetailedYelpData(this.id, map));
 
-                    };
-                })(marker, content, infowindow));
+                   // };
+               // })(marker, content, infowindow));
             }
-
+          
         },
         error: function (err) {
             console.log("error");
@@ -360,7 +393,6 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
         lng: long
     }
     if (navigator.geolocation) {
-        console.log("here in nav: google directions")
         navigator.geolocation.getCurrentPosition(function (position) {
             var currentPos = {
                 lat: position.coords.latitude,
@@ -381,6 +413,18 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
             });
             directionsService.route(directionObjects, (response, status) => {
                 console.log(response)
+                if (!response.routes.length) {
+                    $('#details-modal').modal('hide');
+                    $('#info-box').empty();
+                    console.log("unavailable routes");
+                    var backbutton = $("<button>").addClass("backButton").text("Back");
+                    var directionDiv = $('<div>').addClass('directions').text("Unable to Route a way to get there from current position  ");
+                    $(directionDiv).append(backbutton);
+                    $('#info-box').append(directionDiv)
+                    $('.backButton').click(initiateSearch)
+                   
+                    return;
+                }
                 directions = response.routes[0].legs[0].steps;
                 var estimateTime = response.routes[0].legs[0];
                 if (status === 'OK') {

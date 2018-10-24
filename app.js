@@ -106,7 +106,7 @@ function selectType() {
 }
 
 function capitalizeCity(cityName) {
-    let array = cityName.split(' ');
+    let array = cityName.split('%20');
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
         array[i] = capital + array[i].slice(1);

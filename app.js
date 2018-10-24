@@ -311,7 +311,7 @@ function getYelpData(map) {
             if (response) {
                 if (response.success === false) { 
                     console.log("ZERO RESULTS")
-                    $('#errorMessage').text('Invalid City or No Search Results found');
+                    $('#errorMessage').text('Invalid Search');
                     $('#errorModal').modal("show");
                     localStorage.removeItem('city')
                     return;

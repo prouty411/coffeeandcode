@@ -226,6 +226,9 @@ img {
     #info-box{
         margin-top: 12%;
     }
+    body{
+        background: rgba(214, 173, 132, 0.897);
+    }
     }
 @media only screen and (max-width: 480px) {
     .directions {

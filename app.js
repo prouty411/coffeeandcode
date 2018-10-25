@@ -323,6 +323,10 @@ function getYelpData(map) {
         success: function (response) {
             $('#info-box').empty();
             console.log(settings);
+            let scrollDown = $('<p>').text(`Scroll Down For More 👇`);
+            let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
+            $('#info-box').append(scrollDown);
+            $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/index.html") {
             console.log(response);
             if (response) {

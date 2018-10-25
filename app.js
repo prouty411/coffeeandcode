@@ -3,9 +3,24 @@ var previousRoute = false;
 
 var lastMarker = false;
 
+// When the user scrolls down 20px from the top of the document, show the button
 
+
+
+function topFunction(){
+    let position = $('#info-box').offset().top-500;
+    $('#info-box').animate({ scrollTop: position })
+}
 
 function initializeApp() {
+    $('#info-box').scroll(function(){
+        if ($('#info-box').scrollTop() > 20){
+            document.getElementById("myBtn").style.display = "block";
+        } else {
+            document.getElementById("myBtn").style.display = "none";
+        }
+    })
+
    if (window.location.pathname === '/index.html') {
     localStorage.clear();
    }
@@ -43,6 +58,7 @@ function initializeApp() {
         }
     });
     appendCity();
+
 }
 
 function getLocation() {

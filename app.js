@@ -200,8 +200,8 @@ function getDetailedYelpData(id, map) {
             $('.detailed-image > img').attr('src', photos);
             $('.detailed-address').text(display_address)
             $('.detailed-open').text(`${is_open_now ? 'Open Now ✅' : 'Currently Closed ❌'}`);
-            $('.detailed-price').text(`Price range: ${price}`);
-            $('.detailed-rating').text(`${rating}/5 stars`);
+            $('.detailed-price').text(`${price ? (`Price range:  ${price}`) : ''}`);
+            $('.detailed-rating').text(`${rating}/5 stars`)
             $('.detailed-url').attr('href', url);
             $('#directions-button').on('click', function () {
                 $('.img-loader').toggle("hidden")
@@ -305,6 +305,7 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
+            $('#info-box').empty();
             console.log(settings);
         if (window.location.pathname === "/index.html") {
             console.log(response);
@@ -344,6 +345,7 @@ function getYelpData(map) {
                         zip_code
                     }
                 } = eachPlace;
+               
                 if(phone === 'undefined' || !phone){
                     phone = 'Unavailable'
                 }

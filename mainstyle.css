@@ -169,12 +169,19 @@ body {
 .title, .phone, .address, .isOpen{
     text-align: center;
 }
-
+.centerButton{
+    text-align: center;
+    width: 87%;
+    margin: 0 auto;
+}
+.btn-primary.moreInfo{
+    background-color: brown !important;
+    border: none !important;
+}
 .moreInfo {
     text-align: center;
-    color: mediumblue;
+    color: white;
     font-size: 2em;
-    margin-left: 36%;
 }
 .markerInfo {
     text-align: center;

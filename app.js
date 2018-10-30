@@ -135,7 +135,7 @@ function capitalizeCity(cityName) {
 
 function appendCity() {
     let citySearched = localStorage.getItem('city');
-    $('.city-name').text('City Searched: ' + capitalizeCity(citySearched));
+    $('.city-name').text('City Searched: ' + capitalizeCity(citySearched) + ' 🏙️');
 }
 
 function initiateSearch() {
@@ -325,7 +325,7 @@ function getYelpData(map) {
         },
         success: function (response) {
             $('#info-box').empty();
-            let scrollDown = $('<p>').text(`Scroll Down For More 👇`);
+            let scrollDown = $('<p>').text(` Scroll Down For More 👇`);
             let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
@@ -378,7 +378,9 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let moreInfoElem = $('<button>').addClass('moreInfo').text('More Info')
+                let moreInfoElem = $('<div>').append($('<button>').addClass('btn btn-primary moreInfo').text('More Info 📑'));
+                console.log($('.moreInfo').closest('div'))
+                $('.moreInfo').parent().addClass('centerButton');
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);

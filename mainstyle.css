@@ -173,8 +173,8 @@ body {
 .moreInfo {
     text-align: center;
     color: mediumblue;
-    text-decoration: underline;
     font-size: 2em;
+    margin-left: 36%;
 }
 .markerInfo {
     text-align: center;
@@ -229,7 +229,14 @@ body {
     /* Increase font size */
 }
 #myBtn:hover{
-    background: tan;
+    background: black;
+}
+
+.backButton{
+    margin-bottom: 1vw;
+}
+.direct-icon{
+    background: yellow;
 }
 
 @media only screen and (max-width: 791px) {

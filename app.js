@@ -42,6 +42,9 @@ function initializeApp() {
 
    }
 
+   $('#details-modal').on('hide.bs.modal', function (e) {
+    $('.detailed-image > img').attr('src', "images/loader.gif")
+  });
     
     $('#close-modal').click(function() {$('.detailed-image > img').attr('src', "images/loader.gif")});
     $('#carousel').carousel();
@@ -322,13 +325,11 @@ function getYelpData(map) {
         },
         success: function (response) {
             $('#info-box').empty();
-            console.log(settings);
             let scrollDown = $('<p>').text(`Scroll Down For More 👇`);
             let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/index.html") {
-            console.log(response);
             if (response) {
                 if (response.success === false) { 
                     console.log("ZERO RESULTS")
@@ -377,7 +378,7 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let moreInfoElem = $('<div>').addClass('moreInfo').text('More Info')
+                let moreInfoElem = $('<button>').addClass('moreInfo').text('More Info')
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);
@@ -497,9 +498,10 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var distance = $("<p>").html("<b>Estimated Distance</b>: " + estimateTime.distance.text)
                     var travelTime = $("<p>").html("<b>Estimated Travel TimeTime </b>: " + estimateTime.duration.text)
                     var directionDiv = $('<div>').addClass('directions');
+                    var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
+                    $(directionDiv).append(backbutton);
                     for (var i = 0; i < directions.length; i++) {
                         console.log(directions[i].maneuver)
-                        var currentDirection = $("<p>").html(directions[i].instructions);
                         if(directions[i].maneuver) {
                             
                             var icon;
@@ -566,14 +568,15 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                                 icon = $("<img>").addClass("direct-icon").attr("src",`./direction-icons/${step}.png`);
                                 break;
                             }
+                        var currentDirection = $("<p>").html(directions[i].instructions);
                        
-                        $(currentDirection).append(icon);
+                        $(currentDirection).prepend(icon);
                         }
 
                         $(directionDiv).append(currentDirection)
                     }
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
-                    $(directionDiv).append(distance, travelTime, backbutton);
+                    $(directionDiv).append(distance, travelTime);
                     $('#info-box').append(directionDiv)
                     $('.backButton').click(initiateSearch)
                     $('.img-loader').toggle('hidden');

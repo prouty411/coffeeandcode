@@ -378,9 +378,8 @@ function getYelpData(map) {
                 let titleElem = $('<div>').addClass('title').append(h2(name));
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
-                let moreInfoElem = $('<div>').append($('<button>').addClass('btn btn-primary moreInfo').text('More Info 📑'));
-                console.log($('.moreInfo').closest('div'))
-                $('.moreInfo').parent().addClass('centerButton');
+                let moreInfoElem = $('<div>').addClass('centerButton').append($('<button>').addClass('btn btn-primary moreInfo').text('More Info 📑'));
+                // $('.moreInfo').parent().addClass('centerButton');
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);

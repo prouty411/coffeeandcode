@@ -332,8 +332,8 @@ function getYelpData(map) {
         if (window.location.pathname === "/index.html") {
             if (response) {
                 if (response.success === false) { 
-                    console.log("ZERO RESULTS")
-                    $('#errorMessage').text('Invalid Search');
+                    $('#errorMessage').text('Unable to locate city.');
+                    $('#cityInput').val('');
                     $('#errorModal').modal("show");
                     localStorage.removeItem('city')
                     return;
@@ -366,6 +366,9 @@ function getYelpData(map) {
                         zip_code
                     }
                 } = eachPlace;
+                if(!image_url){
+                    image_url = "images/loader.gif";
+                }
                
                 if(phone === 'undefined' || !phone){
                     phone = 'Unavailable'
@@ -379,7 +382,6 @@ function getYelpData(map) {
                 let phoneElem = h2(convertPhone(phone)).addClass('phone');
                 let addressElem = h2(address1).addClass('address');
                 let moreInfoElem = $('<div>').addClass('centerButton').append($('<button>').addClass('btn btn-primary moreInfo').text('More Info 📑'));
-                // $('.moreInfo').parent().addClass('centerButton');
                 infoAreaElem.append(titleElem, phoneElem, addressElem, moreInfoElem);
                 let entireItem = $('<div>').addClass('resultContainer').append(imageAreaElem, infoAreaElem)
                 $('#info-box').append(entireItem);

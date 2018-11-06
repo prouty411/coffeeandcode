@@ -82,7 +82,41 @@ h1 {
     }
     .homeButton{
         float: right;
+        margin-right:5px;
     }
+}
+
+@media only screen and (max-width: 1170px){
+    h1{
+        max-width: 50%;
+    }
+}
+@media only screen and (max-width: 1040px){
+    h1{
+        max-width: 55%;
+    }
+}
+@media only screen and (max-width: 950px){
+    h1{
+        max-width: 60%;
+    }
+}
+@media only screen and (max-width: 885px){
+    h1{
+        max-width: 65%;
+    }
+}
+@media only screen and (max-width: 805px){
+    #firstEmojis{
+        visibility: hidden;
+    }
+    #titleText{
+        display: block !important;
+    }
+}
+
+#titleText{
+    display: inline;
 }
 
 #googleMap {

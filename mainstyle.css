@@ -363,4 +363,20 @@ img {
     }
   
 }
-
+ /*--- Any Landscape Phone --*/
+ @media screen and (max-width: 823px) and (orientation: landscape) {
+    h3 {
+        font-size: 1.25rem !important;
+    }
+    .moreInfo {
+        font-size: 1.00rem;
+    }
+    img {
+        height: 150px;
+        width: 150px;
+    }
+    #myBtn { 
+        padding:10px;
+        font-size: 13px;
+    }
+}

@@ -85,3 +85,41 @@ input::placeholder{
     font-size: 35px;
 }
 
+
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 480px)
+  and (-webkit-min-device-pixel-ratio: 2) {
+      .container > h1 {
+          font-size: 3rem;
+      }
+      #libraries { 
+          margin-left: 5%;
+      }
+      .buttonArea > button {
+          width: 27% !important
+  }
+  input {
+      font-size: inherit;
+      margin-left: inherit;
+      width: 100%;
+  }
+}
+/* ---- Any Landscape Phone */
+@media screen and (max-width: 823px) and (orientation: landscape) {
+    html {
+        height: initial;
+    }
+    input {
+        font-size: inherit;
+        margin-left: inherit;
+        width: 100%;
+    }
+    .container > h1 {
+        font-size: 3rem;
+    }
+    .buttonArea > button {
+        width: 20% !important
+}
+}

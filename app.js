@@ -344,16 +344,12 @@ function getYelpData(map) {
                     console.log("here");
                     window.location.href = `main.html?city=${city}&type=${types}`
                 }
-            $('#info-box').empty();
+        } 
+        $('#info-box').empty();
             let scrollDown = $('<p>').text(` Scroll Down For More 👇`);
             let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
-     
-           
-           
-            
-        } 
             let {
                 businesses
             } = response;

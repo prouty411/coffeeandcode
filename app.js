@@ -14,11 +14,14 @@ function topFunction(){
 
 function initializeApp() {
     $('#info-box').scroll(function(){
+      var btn =  document.getElementById("myBtn")
+       if (btn) { 
         if ($('#info-box').scrollTop() > 20){
             document.getElementById("myBtn").style.display = "block";
         } else {
             document.getElementById("myBtn").style.display = "none";
         }
+    }
     })
 
    if (window.location.pathname === '/index.html') {
@@ -51,9 +54,9 @@ function initializeApp() {
     $("#search").click(initiateSearch);
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
-    $('.location').click(getLocation);
+    // $('.location').click(getLocation);
     $('.homeButton').click(home);
-    getLocation();
+    // getLocation();
     $(document).keypress(function (e) {
         if (e.which == 13) {
             e.preventDefault();
@@ -64,22 +67,23 @@ function initializeApp() {
 
 }
 
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition);
-    } else {
-        $(".carouselContainer").addClass("hideCarousel");
+// function getLocation() {
+//     if (navigator.geolocation) {
+//         navigator.geolocation.getCurrentPosition(showPosition);
+//     } else {
+//         console.log('error');
+//         $(".carouselContainer").addClass("hideCarousel");
 
-    }
-}
+//     }
+// }
 
-function showPosition(position) {
-    let latitude = position.coords.latitude;
-    let longitude = position.coords.longitude;
-    getCarouselYelpData(latitude, longitude);
-    $(".carouselContainer").removeClass("hideCarousel");
+// function showPosition(position) {
+//     let latitude = position.coords.latitude;
+//     let longitude = position.coords.longitude;
+//     getCarouselYelpData(latitude, longitude);
+//     $(".carouselContainer").removeClass("hideCarousel");
 
-}
+// }
 
 
 
@@ -99,6 +103,9 @@ function displayMap() {
         }
     }
     let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
+    console.log("here")
+    console.log(window.localStorage.getItem('city'));
+    console.log(window.localStorage.getItem('types')); 
     getYelpData(map);
     
 
@@ -145,10 +152,10 @@ function initiateSearch() {
         $('#errorModal').modal("show");
         return;
     }
-    // if(localStorage.city){
-    //     window.location.href = "main.html";
-    //     return;
-    // }
+    if(localStorage.city){
+        window.location.href = "main.html";
+        return;
+    }
     let city = $('#cityInput').val();
     if (localStorage.getItem('city')) {
         city = localStorage.getItem('city');
@@ -209,7 +216,7 @@ function getDetailedYelpData(id, map) {
             }
             photos = photos[2]
             display_address = display_address[0] + ' ' + display_address[1];
-    
+            console.log(display_address);
             $('#details-header').text(name);
             $('.detailed-image > img').attr('src', photos);
             $('.detailed-address').text(display_address)
@@ -225,7 +232,7 @@ function getDetailedYelpData(id, map) {
 
         },
         error: function (error) {
-    
+            console.log(error);
         }
     }
 
@@ -280,7 +287,7 @@ function getCarouselYelpData(latitude, longitude) {
             })
         },
         error: function (err) {
-
+            console.log(err);
         }
     }
     $.ajax(settings);
@@ -288,18 +295,19 @@ function getCarouselYelpData(latitude, longitude) {
 
 /******** API DATA ******************************************* */
 function getYelpData(map) {
-     
     var city;
     var types;
     var icon;
     if (localStorage.length) {
         city = localStorage.getItem("city");
         types = localStorage.getItem("types");
+        console.log("city and types", city, types)
     }
     if (window.location.pathname === "/index.html") {
         localStorage.setItem("types", `${types}`);
         var city = localStorage.getItem("city");
         var types = localStorage.getItem("types");
+        console.log("test", city, types);
     }
   
     var settings = {
@@ -383,12 +391,12 @@ function getYelpData(map) {
                     getDetailedYelpData(id,map);
                 })
             })
-        if (map) {
+            
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
             })
-        }
+
             for (var index = 0; index < response.businesses.length; index++) {
                 var pos = {
                     lat: response.businesses[index].coordinates.latitude,
@@ -434,29 +442,10 @@ function getYelpData(map) {
                    // };
                // })(marker, content, infowindow));
             }
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                  pos = {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                  }
-                  var infowindow = new google.maps.InfoWindow({
-                    content: "You are Here"
-                  });
-                  map.setCenter(pos);
-                  marker = new google.maps.Marker({
-                    map: map,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP,
-                    position: pos,
-                  });
-                  infowindow.open(map, marker);
-                })
-            }
-                  
           
-  },
+    console.log(response)},
         error: function (err) {
+            console.log("error");
         }
     }
     $.ajax(settings);
@@ -486,17 +475,15 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                 map: map,
             });
             directionsService.route(directionObjects, (response, status) => {
-        
                 if (!response.routes.length) {
                     $('#details-modal').modal('hide');
                     $('.detailed-image > img').attr('src', "images/loader.gif")
                     $('#info-box').empty();
-                    var backbutton = $("<button>").addClass("backButton").text("Back");
+                    var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     var directionDiv = $('<div>').addClass('directions').text("Unable to Route a way to get there from current position  ");
                     $(directionDiv).append(backbutton);
                     $('#info-box').append(directionDiv)
                     $('.backButton').click(initiateSearch)
-                   
                     return;
                 }
                 directions = response.routes[0].legs[0].steps;
@@ -507,6 +494,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     }
                     previousRoute = display;
                     display.setDirections(response);
+                    console.log(response);
                     $('#info-box').empty();
                     var distance = $("<p>").html("<b>Estimated Distance</b>: " + estimateTime.distance.text)
                     var travelTime = $("<p>").html("<b>Estimated Travel TimeTime </b>: " + estimateTime.duration.text)
@@ -514,6 +502,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     $(directionDiv).append(backbutton);
                     for (var i = 0; i < directions.length; i++) {
+                        console.log(directions[i].maneuver)
                         if(directions[i].maneuver) {
                             
                             var icon;
@@ -606,18 +595,17 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
 
             });
 
-        }, 
-        function() {
-            $('#details-modal').modal('hide');
-            $('#info-box').empty();
-            var backbutton = $("<button>").addClass("backButton").text("Back");
-            directionDiv = $('<div>').addClass('directions').text("Please turn on geolocation and refresh page to use this feature  ");
-            directionDiv.append(backbutton);
-            $('#info-box').append(directionDiv)
-            $('.backButton').click(initiateSearch);
-            $('.img-loader').toggle("hidden");
-
-        }   )
+        },
+    function() {
+        console.log("no directions")
+        $('#details-modal').modal('hide');
+        $('#info-box').empty();
+        var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
+        var directionDiv = $('<div>').addClass('directions').text("Please turn on geolocation to use this feature  ");
+        $(directionDiv).append(backbutton);
+        $('#info-box').append(directionDiv)
+        $('.backButton').click(initiateSearch)
+    })
     }
 }
 

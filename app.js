@@ -24,7 +24,7 @@ function initializeApp() {
     }
     })
 
-   if (window.location.pathname === '/index.html') {
+   if (window.location.pathname === '/coffeeandcode/index.html') {
     localStorage.clear();
    }
    if (window.location.pathname ==='/main.html') {
@@ -90,7 +90,7 @@ function initializeApp() {
 
 function home() {
     localStorage.clear();
-    window.location.href = "index.html";
+    window.location.href = "/coffeeandcode/index.html";
 
 }
 
@@ -152,10 +152,10 @@ function initiateSearch() {
         $('#errorModal').modal("show");
         return;
     }
-    if(localStorage.city){
-        window.location.href = "main.html";
-        return;
-    }
+    // if(localStorage.city){
+    //     window.location.href = "main.html";
+    //     return;
+    // }
     let city = $('#cityInput').val();
     if (localStorage.getItem('city')) {
         city = localStorage.getItem('city');
@@ -303,7 +303,7 @@ function getYelpData(map) {
         types = localStorage.getItem("types");
         console.log("city and types", city, types)
     }
-    if (window.location.pathname === "/index.html") {
+    if (window.location.pathname === "/coffeeandcode/index.html") {
         localStorage.setItem("types", `${types}`);
         var city = localStorage.getItem("city");
         var types = localStorage.getItem("types");
@@ -331,7 +331,7 @@ function getYelpData(map) {
             let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
-        if (window.location.pathname === "/index.html") {
+        if (window.location.pathname === "/coffeeandcode/index.html") {
             if (response) {
                 if (response.success === false) { 
                     $('#errorMessage').text('Unable to locate city.');

@@ -92,7 +92,7 @@ function showPosition(position) {
 
 function home() {
     localStorage.clear();
-    window.location.href = "/index.html";
+    window.location.href = "index.html";
 
 }
 
@@ -305,7 +305,7 @@ function getYelpData(map) {
         types = localStorage.getItem("types");
         console.log("city and types", city, types)
     }
-    if (window.location.pathname === "coffeeandcode/index.html") {
+    if (window.location.pathname === "/coffeeandcode/index.html") {
         localStorage.setItem("types", `${types}`);
         var city = localStorage.getItem("city");
         var types = localStorage.getItem("types");
@@ -328,7 +328,7 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
-            if (window.location.pathname ===  "coffeeandcode/index.html") {
+            if (window.location.pathname ===  "/coffeeandcode/index.html") {
                 console.log("here")
                 if (response) {
                     console.log("here")

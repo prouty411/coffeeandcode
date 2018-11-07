@@ -397,7 +397,7 @@ function getYelpData(map) {
                     getDetailedYelpData(id,map);
                 })
             })
-          
+          if (map) {
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
@@ -449,7 +449,8 @@ function getYelpData(map) {
                    // };
                // })(marker, content, infowindow));
             }
-      },
+        }
+        },
         error: function (err) {
             console.log("error");
         }

@@ -161,7 +161,7 @@ function initiateSearch() {
         city = localStorage.getItem('city');
     }
     localStorage.setItem("city", `${city}`);
-    getYelpData();
+    getYelpData(map="");
     // window.location.pathname = `\?city=${city}&type=${types}`
 }
 
@@ -579,6 +579,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     $(directionDiv).append(distance, travelTime);
                     $('#info-box').append(directionDiv)
+                    $('#info-box').scrollTop();
                     $('.backButton').click(initiateSearch)
                     $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');

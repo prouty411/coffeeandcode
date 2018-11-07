@@ -24,10 +24,10 @@ function initializeApp() {
     }
     })
 
-   if (window.location.pathname === 'coffeeandcode/index.html') {
+   if (window.location.pathname === '/coffeeandcode/index.html') {
     localStorage.clear();
    }
-   if (window.location.pathname ==='coffeeandcode/main.html') {
+   if (window.location.pathname ==='/coffeeandcode/main.html') {
     if (window.location.href.includes('?city')) {
         var url = window.location.href.split('?');
         params = url[1].split('&');
@@ -92,7 +92,7 @@ function showPosition(position) {
 
 function home() {
     localStorage.clear();
-    window.location.href = "coffeeandcode/index.html";
+    window.location.href = "/index.html";
 
 }
 

@@ -492,7 +492,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     if (previousRoute) {
                         previousRoute.setMap(null);
                     }
-                   display = previousRoute;
+                    previousRoute = true;
                     display.setDirections(response);
                     console.log(response);
                     $('#info-box').empty();

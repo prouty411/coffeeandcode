@@ -27,7 +27,7 @@ function initializeApp() {
    if (window.location.pathname === '/coffeeandcode/') {
     localStorage.clear();
    }
-   if (window.location.pathname ==='/main.html') {
+   if (window.location.pathname ==='/coffeeandcode/main.html') {
     if (window.location.href.includes('?city')) {
         var url = window.location.href.split('?');
         params = url[1].split('&');
@@ -102,10 +102,7 @@ function displayMap() {
             lng: -117.8265
         }
     }
-    let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
-    console.log("here")
-    console.log(window.localStorage.getItem('city'));
-    console.log(window.localStorage.getItem('types')); 
+    let map = new google.maps.Map(document.getElementById("googleMap"), mapProps); 
     getYelpData(map);
     
 

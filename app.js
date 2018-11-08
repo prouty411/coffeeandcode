@@ -161,7 +161,7 @@ function initiateSearch() {
         city = localStorage.getItem('city');
     }
     localStorage.setItem("city", `${city}`);
-    getYelpData(map="");
+    getYelpData();
     // window.location.pathname = `\?city=${city}&type=${types}`
 }
 
@@ -483,7 +483,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var directionDiv = $('<div>').addClass('directions').text("Unable to Route a way to get there from current position  ");
                     $(directionDiv).append(backbutton);
                     $('#info-box').append(directionDiv)
-                    $('.backButton').click(initiateSearch)
+                    $('.backButton').click(displayMap)
                     return;
                 }
                 directions = response.routes[0].legs[0].steps;
@@ -580,7 +580,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     $(directionDiv).append(distance, travelTime);
                     $('#info-box').append(directionDiv)
                     $('#info-box').scrollTop();
-                    $('.backButton').click(initiateSearch)
+                    $('.backButton').click(displayMap)
                     $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');
                     $('.detailed-image > img').attr('src', "images/loader.gif")
@@ -605,7 +605,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
         var directionDiv = $('<div>').addClass('directions').text("Please turn on geolocation to use this feature  ");
         $(directionDiv).append(backbutton);
         $('#info-box').append(directionDiv)
-        $('.backButton').click(initiateSearch)
+        $('.backButton').click(displayMap)
     })
     }
 }

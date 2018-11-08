@@ -576,7 +576,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     $(directionDiv).append(distance, travelTime);
                     $('#info-box').append(directionDiv)
-                    $('#info-box').scrollTop();
+                    $('.directions').scrollTop(0);
                     $('.backButton').click(displayMap)
                     $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');

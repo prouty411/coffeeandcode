@@ -37,7 +37,7 @@ function initializeApp() {
    if (window.location.pathname === '/coffeeandcode/') {
     localStorage.clear();
    }
-   if (window.location.pathname ==='/main.html') {
+   if (window.location.pathname ==='/coffeeandcode/main.html') {
     if (window.location.href.includes('?city')) {
         var url = window.location.href.split('?');
         params = url[1].split('&');
@@ -63,13 +63,15 @@ function initializeApp() {
     else $('.detailed-image > img').attr('src', "images/loader.gif")
   });
     
+
     $('#close-modal').click(function() { var types = localStorage.getItem(`types`); 
     if (types === "libraries"){
         $('.detailed-image > img').attr('src', "images/library-loader.gif")
     }
     else $('.detailed-image > img').attr('src', "images/loader.gif")});
-    $('#carousel').carousel();
-    $("#search").click(initiateSearch);
+    $('#close-modal').click(function() {$('.detailed-image > img').attr('src', "images/loader.gif")});
+    // $('#carousel').carousel();
+    $("#search").click(function() {initiateSearch()});
     $('#libraries').click(selectType);
     $('#coffee').click(selectType);
     // $('.location').click(getLocation);
@@ -120,10 +122,7 @@ function displayMap() {
             lng: -117.8265
         }
     }
-    let map = new google.maps.Map(document.getElementById("googleMap"), mapProps)
-    console.log("here")
-    console.log(window.localStorage.getItem('city'));
-    console.log(window.localStorage.getItem('types')); 
+    let map = new google.maps.Map(document.getElementById("googleMap"), mapProps); 
     getYelpData(map);
     
 
@@ -328,6 +327,7 @@ function getYelpData(map) {
         types = localStorage.getItem("types");
         console.log("city and types", city, types)
     }
+
     if (window.location.pathname === "/coffeeandcode/") {
         localStorage.setItem("types", `${types}`);
         var city = localStorage.getItem("city");
@@ -423,7 +423,7 @@ function getYelpData(map) {
                     getDetailedYelpData(id,map);
                 })
             })
-            
+            if(response.businesses[0]) {
             map.setCenter({
                 lat: response.businesses[0].coordinates.latitude,
                 lng: response.businesses[0].coordinates.longitude
@@ -474,8 +474,7 @@ function getYelpData(map) {
                    // };
                // })(marker, content, infowindow));
             }
-          
-        },
+   }},
         error: function (err) {
             console.log("error");
         }
@@ -519,7 +518,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var directionDiv = $('<div>').addClass('directions').text("Unable to Route a way to get there from current position  ");
                     $(directionDiv).append(backbutton);
                     $('#info-box').append(directionDiv)
-                    $('.backButton').click(initiateSearch)
+                    $('.backButton').click(displayMap)
                     return;
                 }
                 directions = response.routes[0].legs[0].steps;
@@ -528,7 +527,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     if (previousRoute) {
                         previousRoute.setMap(null);
                     }
-                    previousRoute = display;
+                    previousRoute = true;
                     display.setDirections(response);
                     console.log(response);
                     $('#info-box').empty();
@@ -615,7 +614,8 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     $(directionDiv).append(distance, travelTime);
                     $('#info-box').append(directionDiv)
-                    $('.backButton').click(initiateSearch)
+                    $('#info-box').scrollTop(0);
+                    $('.backButton').click(displayMap)
                     $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');
                     var types = localStorage.getItem(`types`); 
@@ -644,7 +644,7 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
         var directionDiv = $('<div>').addClass('directions').text("Please turn on geolocation to use this feature  ");
         $(directionDiv).append(backbutton);
         $('#info-box').append(directionDiv)
-        $('.backButton').click(initiateSearch)
+        $('.backButton').click(displayMap)
     })
     }
 }

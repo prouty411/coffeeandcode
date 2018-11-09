@@ -107,7 +107,7 @@ input::placeholder{
   }
 }
 /* ---- Any Landscape Phone */
-@media screen and (max-width: 823px) and (orientation: landscape) {
+@media screen and (max-device-width: 823px) and (orientation: landscape) {
     html {
         height: initial;
     }

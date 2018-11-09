@@ -13,6 +13,16 @@ function topFunction(){
 }
 
 function initializeApp() {
+    // window.addEventListener("resize", function() { 
+    //     // console.log("body: ", $("html").height());
+    //     // console.log("window: ", window.innerHeight);
+    //     if($("html").height() > window.innerHeight) {
+    //         debugger;
+    //         $('window::-webkit-scrollbar').css('display:none');
+
+    //     }
+    // })
+    
     $('#info-box').scroll(function(){
       var btn =  document.getElementById("myBtn")
        if (btn) { 
@@ -41,14 +51,24 @@ function initializeApp() {
        if (window.localStorage.length === 0) {
            home();
        }
-  
+ 
 
    }
 
    $('#details-modal').on('hide.bs.modal', function (e) {
-    $('.detailed-image > img').attr('src', "images/loader.gif")
+    var types = localStorage.getItem(`types`); 
+    if (types === "libraries"){
+        $('.detailed-image > img').attr('src', "images/library-loader.gif")
+    }
+    else $('.detailed-image > img').attr('src', "images/loader.gif")
   });
     
+
+    $('#close-modal').click(function() { var types = localStorage.getItem(`types`); 
+    if (types === "libraries"){
+        $('.detailed-image > img').attr('src', "images/library-loader.gif")
+    }
+    else $('.detailed-image > img').attr('src', "images/loader.gif")});
     $('#close-modal').click(function() {$('.detailed-image > img').attr('src', "images/loader.gif")});
     // $('#carousel').carousel();
     $("#search").click(function() {initiateSearch()});
@@ -113,6 +133,7 @@ function selectType() {
     //if what we click is highlited...
     if ($(this).hasClass('highlight')) {
         $(this).removeClass('highlight');
+        localStorage.clear();
     }
     //if what we clicked is NOT highlighted, remove the highlight from every button
     else {
@@ -180,6 +201,12 @@ function convertPhone(string) {
 
 function getDetailedYelpData(id, map) {
     $('#details-modal').modal('show');
+    var types = localStorage.getItem(`types`); 
+    if (types === "libraries"){
+        $('.detailed-image > img').attr('src', "images/library-loader.gif")
+    }
+    else $('.detailed-image > img').attr('src', "images/loader.gif")
+  
     let ajaxOptions = {
         'async': true,
         "url": 'https://yelp.ongandy.com/businesses/details',
@@ -300,11 +327,12 @@ function getYelpData(map) {
         types = localStorage.getItem("types");
         console.log("city and types", city, types)
     }
-    if (window.location.pathname === " /coffeeandcode/") {
+
+    if (window.location.pathname === "/coffeeandcode/") {
         localStorage.setItem("types", `${types}`);
         var city = localStorage.getItem("city");
         var types = localStorage.getItem("types");
-        console.log("test", city, types);
+       
     }
   
     var settings = {
@@ -323,6 +351,7 @@ function getYelpData(map) {
             limit: 50,
         },
         success: function (response) {
+          
             $('#info-box').empty();
             let scrollDown = $('<p>').text(` Scroll Down For More 👇`);
             let buttonToTop = $('<button>').addClass("btn btn-warning").text('⬆').attr('id', 'myBtn').attr('title', 'Go To Top').click(function () {topFunction();});
@@ -330,16 +359,19 @@ function getYelpData(map) {
             $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/coffeeandcode/") {
             if (response) {
-                if (response.success === false) { 
+                debugger;
+                if (!response.success) { 
                     $('#errorMessage').text('Unable to locate city.');
                     $('#cityInput').val('');
                     $('#errorModal').modal("show");
                     localStorage.removeItem('city')
                     return;
                 }
+                else {
                 city = localStorage.getItem("city");
                 types = localStorage.getItem("types");
                 window.location.href = `main.html?city=${city}&type=${types}`
+                }
             }
            
            
@@ -365,8 +397,11 @@ function getYelpData(map) {
                         zip_code
                     }
                 } = eachPlace;
-                if(!image_url){
-                    image_url = "images/loader.gif";
+                if(!image_url && types === `libraries`){
+                    image_url = "images/no-image-library.jpg";
+                }
+                if(!image_url && types === `coffee`){
+                    image_url = "images/no-image-cafe.jpg";
                 }
                
                 if(phone === 'undefined' || !phone){
@@ -439,7 +474,6 @@ function getYelpData(map) {
                    // };
                // })(marker, content, infowindow));
             }
-          
    }},
         error: function (err) {
             console.log("error");
@@ -474,7 +508,11 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
             directionsService.route(directionObjects, (response, status) => {
                 if (!response.routes.length) {
                     $('#details-modal').modal('hide');
-                    $('.detailed-image > img').attr('src', "images/loader.gif")
+                    var types = localStorage.getItem(`types`); 
+                    if (types === "libraries"){
+                        $('.detailed-image > img').attr('src', "images/library-loader.gif")
+                    }
+                    else $('.detailed-image > img').attr('src', "images/loader.gif")
                     $('#info-box').empty();
                     var backbutton = $("<button>").addClass("btn btn-primary backButton").text("Back");
                     var directionDiv = $('<div>').addClass('directions').text("Unable to Route a way to get there from current position  ");
@@ -580,7 +618,11 @@ function getDirections(long, lat, map) { // Pass POS which is position of desire
                     $('.backButton').click(displayMap)
                     $('.img-loader').toggle('hidden');
                     $('#details-modal').modal('hide');
-                    $('.detailed-image > img').attr('src', "images/loader.gif")
+                    var types = localStorage.getItem(`types`); 
+                if (types === "libraries"){
+                $('.detailed-image > img').attr('src', "images/library-loader.gif")
+                }
+                 else $('.detailed-image > img').attr('src', "images/loader.gif")
                  
                 }
                 previousRoute = display;

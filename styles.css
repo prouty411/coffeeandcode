@@ -1,11 +1,11 @@
 @import url('https://fonts.googleapis.com/css?family=Quicksand');
-/* @import url('https://fonts.googleapis.com/css?family=Shadto+Light+Two'); */
+@import url('https://fonts.googleapis.com/css?family=Shadto+Light+Two');
 
 html{
     height: 100%;
 }
 *{
-    box-sizing: border-box;
+    /* box-sizing: border-box; */
     padding: 0;
     margin: 0;
     font-family: 'Shadows Into Light Two',
@@ -19,6 +19,7 @@ body{
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+
 }
 .container > h1{
     font-family: 'Shadows Into Light Two',
@@ -123,3 +124,4 @@ input::placeholder{
         width: 20% !important
 }
 }
+

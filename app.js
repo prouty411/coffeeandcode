@@ -358,19 +358,17 @@ function getYelpData(map) {
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/coffeeandcode/") {
-            if (!response.success) { 
-                $('#errorMessage').text('No Results for searched city');
-                $('#cityInput').val('');
-                $('#errorModal').modal("show");
-                localStorage.removeItem('city')
-                return;
-            }
-            if (response) {
+            if (response.businesses.length > 0) {
                 city = localStorage.getItem("city");
                 types = localStorage.getItem("types");
                 window.location.href = `main.html?city=${city}&type=${types}`
             }
-           
+           else {  $('#errorMessage').text('No Results for searched city');
+           $('#cityInput').val('');
+           $('#errorModal').modal("show");
+           localStorage.removeItem('city')
+           return;
+       }
            
             
         } 

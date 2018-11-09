@@ -358,6 +358,7 @@ function getYelpData(map) {
             $('#info-box').append(scrollDown);
             $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/coffeeandcode/") {
+            
             if (response.businesses.length > 0) {
                 city = localStorage.getItem("city");
                 types = localStorage.getItem("types");

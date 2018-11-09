@@ -202,6 +202,12 @@ function convertPhone(string) {
 
 function getDetailedYelpData(id, map) {
     $('#details-modal').modal('show');
+    var types = localStorage.getItem(`types`); 
+    if (types === "libraries"){
+        $('.detailed-image > img').attr('src', "images/library-loader.gif")
+    }
+    else $('.detailed-image > img').attr('src', "images/loader.gif")
+  
     let ajaxOptions = {
         'async': true,
         "url": 'https://yelp.ongandy.com/businesses/details',

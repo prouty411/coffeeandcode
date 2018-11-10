@@ -157,6 +157,8 @@ function capitalizeCity(cityName) {
     }
    }
    else {
+        cityName[0].toUpperCase();
+        console.log(cityName);
       var array = cityName.split('')
       console.log(array);
       var capital = array[0].toUpperCase();

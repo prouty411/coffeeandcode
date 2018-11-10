@@ -148,16 +148,18 @@ function selectType() {
 function capitalizeCity(cityName) {
    if  (window.location.href.includes('%20')) {
     let array = cityName.split('%20');
-   }
-   else { 
-       array = cityName;
-   }
+   
+   
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
         array[i] = capital + array[i].slice(1);
     }
     return array.join(' ')
-
+   }
+   else { 
+    array = cityName;
+    return array;
+}
     
 }
 

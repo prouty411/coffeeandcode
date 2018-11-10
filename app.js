@@ -160,6 +160,7 @@ function capitalizeCity(cityName) {
       var array = cityName.split('')
       console.log(array);
       var capital = array[0].toUpperCase();
+      console.log(capital);
       console.log(array);
       console.log("without space", array)
       return array.join('')

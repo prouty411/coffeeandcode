@@ -146,20 +146,25 @@ function selectType() {
 }
 
 function capitalizeCity(cityName) {
+    console.log(cityName);
    if  (window.location.href.includes('%20')) {
     let array = cityName.split('%20');
-   }
-   else {
-      let array = cityName.split('')
-   }
+    console.log("with space", array)
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
         array[i] = capital + array[i].slice(1);
     }
+   }
+   else {
+      let array = cityName.split('')
+      console.log(array);
+      let capital = array[0].toUpperCase();
+      array = capital + array.slice(1)
+      console.log(array);
+      console.log("without space", array)
+   }
+    
     return array.join(' ')
-   
-  
-}
     
 }
 

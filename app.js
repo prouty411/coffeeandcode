@@ -153,6 +153,7 @@ function capitalizeCity(cityName) {
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
         array[i] = capital + array[i].slice(1);
+        return array.join(' ')
     }
    }
    else {
@@ -161,9 +162,10 @@ function capitalizeCity(cityName) {
       var capital = array[0].toUpperCase();
       console.log(array);
       console.log("without space", array)
+      return array.join('')
    }
     
-    return array.join(' ')
+
     
 }
 

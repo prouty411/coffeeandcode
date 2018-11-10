@@ -148,7 +148,7 @@ function selectType() {
 function capitalizeCity(cityName) {
     console.log(cityName);
    if  (window.location.href.includes('%20')) {
-    let array = cityName.split('%20');
+    var array = cityName.split('%20');
     console.log("with space", array)
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
@@ -156,10 +156,10 @@ function capitalizeCity(cityName) {
     }
    }
    else {
-      let array = cityName.split('')
+      var array = cityName.split('')
       console.log(array);
-      let capital = array[0].toUpperCase();
-      array = capital + array.slice(1)
+      var capital = array[0].toUpperCase();
+      var array = capital + array.slice(1)
       console.log(array);
       console.log("without space", array)
    }

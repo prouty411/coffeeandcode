@@ -17,8 +17,6 @@ body{
     background: #ffece6;
     background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./wallpaper.jpeg');
     background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
 
 }
 .container > h1{

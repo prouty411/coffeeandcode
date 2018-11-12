@@ -146,12 +146,16 @@ function selectType() {
 }
 
 function capitalizeCity(cityName) {
+    if(cityName === null){
+        return;
+    }else{
     let array = cityName.split('%20');
     for (let i = 0; i < array.length; i++) {
         let capital = array[i][0].toUpperCase();
         array[i] = capital + array[i].slice(1);
     }
     return array.join(' ')
+}
 }
 
 function appendCity() {
@@ -359,7 +363,7 @@ function getYelpData(map) {
             $('#info-box').append(buttonToTop);
         if (window.location.pathname === "/coffeeandcode/") {
             
-            if (response.businesses.length > 0) {
+            if (response.hasOwnProperty("businesses") && response.businesses.length > 0) {
                 city = localStorage.getItem("city");
                 types = localStorage.getItem("types");
                 window.location.href = `main.html?city=${city}&type=${types}`
@@ -397,7 +401,7 @@ function getYelpData(map) {
                     image_url = "images/no-image-library.jpg";
                 }
                 if(!image_url && types === `coffee`){
-                    image_url = "images/no-image-cafe.jpg";
+                    image_url = "images/no-img-cafe.png";
                 }
                
                 if(phone === 'undefined' || !phone){
